@@ -11,6 +11,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 const morgan = require("morgan");
 require("dotenv/config");
+const authJwt = require("./middlewares/jwt");
+const errorHandler = require("./middlewares/error_handler");
 
 const app = express();
 const env = process.env;
@@ -21,10 +23,16 @@ app.use(bodyParser.json());
 app.use(morgan("tiny"));
 app.use(cors());
 app.options("*", cors());
+app.use(authJwt());
+app.use(errorHandler);
 
 // Routes
 const authRouter = require("./routes/auth");
+
 app.use(`${api}/`, authRouter);
+app.get(`${api}/users`, (req, res) => {
+  return res.json([{ name: "Tunes" }]);
+});
 
 // Start the server
 const hostname = env.HOST;
