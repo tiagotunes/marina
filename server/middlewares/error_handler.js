@@ -34,7 +34,7 @@ async function errorHandler(error, req, res, next) {
       }
 
       const newAccessToken = jwt.sign(
-        { id: user.id, isAdmin: user.isAdmin },
+        { id: user.id, admin: user.admin },
         process.env.ACCESS_TOKEN_SECRET,
         { expiresIn: "24h" }
       );

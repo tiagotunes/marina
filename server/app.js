@@ -28,11 +28,10 @@ app.use(errorHandler);
 
 // Routes
 const authRouter = require("./routes/auth");
+const usersRouter = require("./routes/users");
 
 app.use(`${api}/`, authRouter);
-app.get(`${api}/users`, (req, res) => {
-  return res.json([{ name: "Tunes" }]);
-});
+app.use(`${api}/users`, usersRouter);
 
 // Start the server
 const hostname = env.HOST;
