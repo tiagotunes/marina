@@ -1,13 +1,17 @@
 const { Schema, model } = require("mongoose");
 
 const measureSchema = Schema({
-  text: { type: String, required: true, trim: true },
-  status: { type: String, required: true },
-  dtStatus: { type: Date, default: Date.now() },
+  measureTypeId: {
+    type: Schema.Types.ObjectId,
+    required: true,
+    ref: "MeasureType",
+  },
+  value: { type: Number, required: true },
   dtCr: { type: Date, default: Date.now() },
   dtUp: Date,
 });
 
-measureSchema.index({ text: 1 }, { unique: true });
+measureSchema.set("toObject", { virtuals: true });
+measureSchema.set("toJson", { virtuals: true });
 
-exports.Measure = model("Measure", measureSchema);
+exports.TaskMeasure = model("Measure", measureSchema);

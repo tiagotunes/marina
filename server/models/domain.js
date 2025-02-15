@@ -11,4 +11,7 @@ const domainSchema = Schema({
 
 domainSchema.index({ name: 1 }, { unique: true });
 
+domainSchema.set("toObject", { virtuals: true });
+domainSchema.set("toJson", { virtuals: true });
+
 exports.Domain = model("Domain", domainSchema);

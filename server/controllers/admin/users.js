@@ -1,5 +1,5 @@
-const { User } = require("../models/user");
-const { Token } = require("../models/token");
+const { User } = require("../../models/user");
+const { Token } = require("../../models/token");
 
 exports.getUserCount = async function (req, res) {
   try {
@@ -20,6 +20,8 @@ exports.deleteUser = async function (req, res) {
 
     const user = await User.findById(userId);
     if (!user) return res.status(404).json({ message: "User not found!" });
+
+    // DELETE Tasks and Measures from User
 
     await Token.deleteOne({ userId: userId });
     await User.deleteOne({ _id: userId });
