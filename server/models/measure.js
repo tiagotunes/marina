@@ -6,6 +6,11 @@ const measureSchema = Schema({
     required: true,
     ref: "MeasureType",
   },
+  taskId: {
+    type: Schema.Types.ObjectId,
+    required: true,
+    ref: "Task",
+  },
   value: { type: Number, required: true },
   dtCr: { type: Date, default: Date.now() },
   dtUp: Date,

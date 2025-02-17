@@ -14,8 +14,6 @@ router.delete("/users/:id", usersController.deleteUser);
 router.post("/domains", domainsController.addDomain);
 
 // DOCUMENTS
-router.get("/docs", docsController.getDocs);
-router.get("/docs/:id", docsController.getDoc);
 router.post("/docs", docsController.addDoc);
 router.put("/docs/:id", docsController.editDoc);
 router.delete("/docs/:id", docsController.deleteDoc);

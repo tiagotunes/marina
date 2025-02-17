@@ -27,18 +27,26 @@ app.use(authJwt());
 app.use(errorHandler);
 
 // Routes
-const authRouter = require("./routes/auth");
-const usersRouter = require("./routes/users");
 const adminRouter = require("./routes/admin");
+const authRouter = require("./routes/auth");
+const docsRouter = require("./routes/documents");
+const domainsRouter = require("./routes/domains");
+const tasksRouter = require("./routes/tasks");
+const usersRouter = require("./routes/users");
 
-app.use(`${api}/`, authRouter);
-app.use(`${api}/users`, usersRouter);
 app.use(`${api}/admin`, adminRouter);
+app.use(`${api}/`, authRouter);
+app.use(`${api}/docs`, docsRouter);
+app.use(`${api}/domains`, domainsRouter);
+app.use(`${api}/tasks`, tasksRouter);
+app.use(`${api}/users`, usersRouter);
 app.use("/public", express.static(__dirname + "/public"));
 
 // Start the server
 const hostname = env.HOST;
 const port = env.PORT;
+
+require("./helpers/cron_job");
 
 mongoose
   .connect(env.MONGODB_CONNECTION_STRING)
