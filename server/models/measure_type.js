@@ -14,4 +14,4 @@ measureTypeSchema.index({ name: 1 }, { unique: true });
 measureTypeSchema.set("toObject", { virtuals: true });
 measureTypeSchema.set("toJson", { virtuals: true });
 
-exports.Measure = model("MeasureTypeSchema", measureTypeSchema);
+exports.Measure = model("MeasureType", measureTypeSchema);

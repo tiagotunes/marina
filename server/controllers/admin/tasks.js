@@ -4,7 +4,15 @@ exports.getTasks = async function (req, res) {
   try {
     const tasks = await Task.find()
       // .select("-dtCr -dtUp")
-      .sort({ dtDeadline: -1 });
+      // .populate("userId", "name role")
+      .sort({ dtDeadline: -1 })
+      .populate({
+        path: "measures",
+        populate: {
+          path: "measureTypeId",
+          select: "name",
+        },
+      });
     if (!tasks) {
       return res.status(404).json({ message: "Tasks not found" });
     }

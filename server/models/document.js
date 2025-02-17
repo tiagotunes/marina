@@ -11,7 +11,7 @@ const documentSchema = Schema({
   dtUp: Date,
 });
 
-documentSchema.index({ name: "text", text: "text" });
+documentSchema.index({ title: "text", text: "text" });
 
 documentSchema.set("toObject", { virtuals: true });
 documentSchema.set("toJson", { virtuals: true });
