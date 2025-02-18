@@ -6,12 +6,7 @@ const measureSchema = Schema({
     required: true,
     ref: "MeasureType",
   },
-  taskId: {
-    type: Schema.Types.ObjectId,
-    required: true,
-    ref: "Task",
-  },
-  value: { type: Number, required: true },
+  value: { type: Number, default: 0, required: true },
   dtCr: { type: Date, default: Date.now() },
   dtUp: Date,
 });
@@ -19,4 +14,4 @@ const measureSchema = Schema({
 measureSchema.set("toObject", { virtuals: true });
 measureSchema.set("toJson", { virtuals: true });
 
-exports.TaskMeasure = model("Measure", measureSchema);
+exports.Measure = model("Measure", measureSchema);

@@ -3,6 +3,8 @@ const { Domain } = require("../models/domain");
 const { Document } = require("../models/document");
 const { User } = require("../models/user");
 const { Task } = require("../models/task");
+const { MeasureType } = require("../models/measure_type");
+const { Measure } = require("../models/measure");
 
 // "minute hour dayOfMonth month dayOfWeek"
 
@@ -30,7 +32,7 @@ cron.schedule("0 0 * * *", async function () {
   }
 });
 
-cron.schedule("0 0 * * *", async function () {
+cron.schedule("21 18 * * *", async function () {
   try {
     console.log("[CREATE_TASKS]   running   ", new Date());
 
@@ -41,12 +43,20 @@ cron.schedule("0 0 * * *", async function () {
       for (const u of users) {
         const existingTask = await Task.findOne({ docId: d.id, userId: u.id });
         if (!existingTask) {
-          await Task.create({
+          let task = new Task({
             docId: d.id,
             userId: u.id,
             dtDeadline: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
             status: "I",
           });
+
+          const mts = await MeasureType.find({ status: "A" });
+          for (const m of mts) {
+            let measure = new Measure({ measureTypeId: m.id });
+            measure = await measure.save();
+            task.measures.push(measure);
+            task = await task.save();
+          }
         }
       }
     }

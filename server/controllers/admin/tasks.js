@@ -12,8 +12,17 @@ exports.getTasks = async function (req, res) {
       })
       .populate({
         path: "userId",
-        select: "name",
+        select: "name role",
+      })
+      .populate({
+        path: "measures",
+        select: "value",
+        populate: {
+          path: "measureTypeId",
+          select: "name",
+        },
       });
+
     if (!tasks) {
       return res.status(404).json({ message: "Tasks not found" });
     }
