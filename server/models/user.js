@@ -1,4 +1,7 @@
 const { Schema, model } = require("mongoose");
+const { Token } = require("../models/token");
+const { Task } = require("../models/task");
+const { Measure } = require("../models/measure");
 
 const userSchema = Schema({
   name: { type: String, required: true, trim: true },
@@ -6,14 +9,49 @@ const userSchema = Schema({
   passwordHash: { type: String, required: true },
   resetPasswordOtp: Number,
   dtResetPasswordOtp: Date,
-  gender: String,
-  role: String,
+  gender: { type: String, enum: ["undefined", "female", "male"] },
+  domains: [{ type: Schema.Types.ObjectId, ref: "Domain" }],
+  status: {
+    type: String,
+    enum: ["active", "inactive", "deleted"],
+  },
   admin: { type: Boolean, default: false },
   dtCr: { type: Date, default: Date.now() },
   dtUp: Date,
 });
 
 userSchema.index({ email: 1 }, { unique: true });
+
+/*------------------------------------------------------------------------
+  PRE HOOKS - Delete tasks and mesaures related to the user
+------------------------------------------------------------------------*/
+userSchema.pre("findOneAndDelete", async function (next) {
+  const user = await this.model.findOne(this.getFilter());
+  if (!user) return next();
+
+  // Delete user token
+  await Token.deleteOne({ userId: user._id });
+
+  // Find all tasks assigned to the user
+  const tasks = await Task.find({ userId: user._id });
+  // console.log(tasks);
+
+  // Extract all measure IDs from the tasks
+  const measureIds = tasks.flatMap((task) => task.measures);
+  // console.log(measureIds);
+
+  // NOT TESTED
+  // Delete all measures associated with the tasks
+  // await Measure.deleteMany({ _id: { $in: measureIds } });
+
+  // NOT TESTED
+  // Delete all tasks assigned to the user
+  // await Task.deleteMany({ userId: user._id });
+
+  next();
+});
+/*------------------------------------------------------------------------
+------------------------------------------------------------------------*/
 
 userSchema.set("toObject", { virtuals: true });
 userSchema.set("toJson", { virtuals: true });

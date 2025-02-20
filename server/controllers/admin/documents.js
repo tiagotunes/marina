@@ -84,11 +84,6 @@ exports.editDocument = async function (req, res) {
     const { domainId, title, text, status } = req.body;
     const updateFields = { dtUp: Date.now() };
 
-    let document = await Document.findById(req.params.id);
-    if (!document) {
-      return res.status(404).json({ message: "Document not found" });
-    }
-
     // Confirm If Domain Exists
     if (domainId != null) {
       const domain = await Domain.findById(domainId);
@@ -105,7 +100,10 @@ exports.editDocument = async function (req, res) {
       updateFields.dtStatus = Date.now();
     }
 
-    await document.set(updateFields).save();
+    const document = await Document.findByIdAndUpdate(userId, updateFields, {
+      new: true,
+    });
+    if (!document) return res.status(404).json({ message: "User not found" });
 
     return res.json(document);
   } catch (error) {

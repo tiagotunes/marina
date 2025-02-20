@@ -8,7 +8,8 @@ const tasksController = require("../controllers/admin/tasks");
 const mtController = require("../controllers/admin/measureTypes");
 
 // USERS
-router.get("/users/count", usersController.getUserCount);
+router.get("/users/count", usersController.getUsersCount);
+router.post("/users/:id", usersController.updateUser);
 router.delete("/users/:id", usersController.deleteUser);
 
 // DOMAINS

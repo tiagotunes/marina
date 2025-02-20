@@ -10,7 +10,7 @@ const { Measure } = require("../models/measure");
 
 cron.schedule("0 0 * * *", async function () {
   try {
-    console.log("[UPDATE_DOMAINS] running   ", new Date());
+    console.log("[UPDATE_DOMAINS] Running at ", new Date());
 
     let domainsToBeUpdated = await Domain.find();
     domainsToBeUpdated = domainsToBeUpdated.filter(
@@ -26,42 +26,84 @@ cron.schedule("0 0 * * *", async function () {
         domain.save();
       }
     }
-    console.log("[UPDATE_DOMAINS] completed ", new Date());
+    console.log(
+      `[UPDATE_DOMAINS] Completed at ${new Date()}, Updated ${
+        domainsToBeUpdated.length
+      } domains`
+    );
   } catch (error) {
-    console.error("[UPDATE_DOMAINS] error     ", error);
+    console.error("[UPDATE_DOMAINS] Error: ", error);
   }
 });
 
-cron.schedule("21 18 * * *", async function () {
+cron.schedule("0 0 * * *", async function () {
   try {
-    console.log("[CREATE_TASKS]   running   ", new Date());
+    console.log("[CREATE_TASKS] Running at ", new Date());
 
     const docs = await Document.find({ status: "O" });
-    const users = await User.find({ admin: false });
+    const users = await User.find({ status: "active", admin: false });
+    const measureTypes = await MeasureType.find({ status: "A" });
 
-    for (const d of docs) {
-      for (const u of users) {
-        const existingTask = await Task.findOne({ docId: d.id, userId: u.id });
+    if (!docs || !users || !measureTypes) {
+      console.log("[CREATE_TASKS] No new tasks to create");
+      return;
+    }
+
+    const tasksToInsert = [];
+    const measuresToInsert = [];
+
+    for (const doc of docs) {
+      for (const user of users) {
+        const existingTask = await Task.findOne({
+          docId: doc.id,
+          userId: user.id,
+        });
         if (!existingTask) {
-          let task = new Task({
-            docId: d.id,
-            userId: u.id,
+          const taskId = new Task()._id;
+
+          // Create measures associated with this task
+          const measures = measureTypes.map((mType) => ({
+            measureTypeId: mType._id,
+            taskId: taskId,
+          }));
+          measuresToInsert.push(...measures);
+
+          // Create new Task
+          tasksToInsert.push({
+            _id: taskId,
+            docId: doc.id,
+            userId: user.id,
             dtDeadline: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
             status: "I",
+            measures: measures.map((m) => m._id),
           });
-
-          const mts = await MeasureType.find({ status: "A" });
-          for (const m of mts) {
-            let measure = new Measure({ measureTypeId: m.id });
-            measure = await measure.save();
-            task.measures.push(measure);
-            task = await task.save();
-          }
         }
       }
     }
-    console.log("[CREATE_TASKS]   completed ", new Date());
+
+    // Insert measures and tasks
+    if (measuresToInsert.length) {
+      const insertedMeasures = await Measure.insertMany(measuresToInsert);
+      const measureMap = new Map(
+        insertedMeasures.map((m) => [m.taskId.toString(), m._id])
+      );
+
+      // Assign the correct measure IDs to tasks
+      tasksToInsert.forEach((task) => {
+        task.measures = measureMap.get(task._id.toString()) || [];
+      });
+    }
+
+    if (tasksToInsert.length) {
+      await Task.insertMany(tasksToInsert);
+    }
+
+    console.log(
+      `[CREATE_TASKS] Completed at ${new Date()}, Created ${
+        tasksToInsert.length
+      } tasks`
+    );
   } catch (error) {
-    console.error("[CREATE_TASKS]   error     ", error);
+    console.error("[CREATE_TASKS] Error: ", error);
   }
 });

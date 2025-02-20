@@ -32,12 +32,11 @@ exports.register = async function (req, res) {
     return res.status(201).json(user);
   } catch (error) {
     if (error.message.includes("email_1 dup key")) {
-      res.status(409).json({
+      return res.status(409).json({
         type: "AuthError",
         message: "User with that email already exists",
       });
     }
-    console.error(error);
     return res.status(500).json({ type: error.name, message: error.message });
   }
 };
@@ -48,12 +47,10 @@ exports.login = async function (req, res) {
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res
-        .status(404)
-        .json({ message: "User not found\nCheck your email and try again." });
+      return res.status(404).json({ message: "User not found" });
     }
     if (!bcrypt.compareSync(password, user.passwordHash)) {
-      return res.status(400).json({ message: "Incorrect password!" });
+      return res.status(400).json({ message: "Incorrect password" });
     }
 
     const accessToken = jwt.sign(
