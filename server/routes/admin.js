@@ -15,9 +15,10 @@ router.delete("/users/:id", usersController.deleteUser);
 router.post("/domains", domainsController.addDomain);
 
 // DOCUMENTS
-router.post("/docs", docsController.addDoc);
-router.put("/docs/:id", docsController.editDoc);
-router.delete("/docs/:id", docsController.deleteDoc);
+router.get("/documents", docsController.getDocuments);
+router.get("/documents/count", docsController.getDocumentsCount);
+router.post("/documents", docsController.addDocument);
+router.put("/documents/:id", docsController.editDocument);
 
 // TASKS
 router.get("/tasks", tasksController.getTasks);

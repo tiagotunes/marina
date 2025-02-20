@@ -1,34 +1,56 @@
-const mh = require("../../helpers/media_helper");
-const util = require("util");
 const { Document } = require("../../models/document");
 const { Domain } = require("../../models/domain");
 
-exports.addDoc = async function (req, res) {
+/*------------------------------------------------------------------------
+  GET 
+  /admin/documents
+------------------------------------------------------------------------*/
+exports.getDocuments = async function (req, res) {
+  try {
+    const page = req.query.page || 1;
+    const pageSize = 10; // req.query.pageSize ?
+    const docs = await Document.find()
+      .select("-dtStatus -dtCr")
+      .populate({
+        path: "domainId",
+        select: "name",
+      })
+      .skip((page - 1) * pageSize)
+      .limit(pageSize);
+
+    if (!docs) return res.status(404).json({ message: "Documents not found" });
+    return res.json(docs);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ type: error.name, message: error.message });
+  }
+};
+
+/*------------------------------------------------------------------------
+  GET
+  /admin/documents/count
+------------------------------------------------------------------------*/
+exports.getDocumentsCount = async function (req, res) {
+  try {
+    const docsCount = await Document.countDocuments();
+
+    if (!docsCount)
+      return res.status(500).json({ message: "Could not count documents" });
+
+    return res.json(docsCount);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ type: error.name, message: error.message });
+  }
+};
+
+/*------------------------------------------------------------------------
+  POST 
+  /admin/documents
+------------------------------------------------------------------------*/
+exports.addDocument = async function (req, res) {
   try {
     const { domainId, title, text, status } = req.body;
-
-    // const uploadImage = util.promisify(
-    //   mh.upload.fields([
-    //     {
-    //       name: "image",
-    //       maxCount: 1,
-    //     },
-    //   ])
-    // );
-    // try {
-    //   await uploadImage(req, res);
-    // } catch (error) {
-    //   console.error(error);
-    //   return res.status(500).json({
-    //     type: error.code,
-    //     message: `${error.message}{${error.field}}`,
-    //     storageErrors: error.storageErrors,
-    //   });
-    // }
-
-    // const image = req.files["image"][0];
-    // if (!image) return res.status(404).json({ message: "No file found" });
-    // req.body["image"] = `${req.protocol}://${req.get("host")}/${image.path}`;
 
     const domain = await Domain.findById(domainId);
     if (!domain) return res.status(404).json({ message: "Domain not found" });
@@ -45,6 +67,7 @@ exports.addDoc = async function (req, res) {
         .status(500)
         .json({ message: "The document could not be created" });
     }
+
     res.status(201).json(document);
   } catch (error) {
     console.error(error);
@@ -52,34 +75,39 @@ exports.addDoc = async function (req, res) {
   }
 };
 
-exports.editDoc = async function (req, res) {
+/*------------------------------------------------------------------------
+  PUT 
+  /admin/documents/:id
+------------------------------------------------------------------------*/
+exports.editDocument = async function (req, res) {
   try {
-    const { title, text, status } = req.body;
-    const document = await Document.findByIdAndUpdate(
-      req.params.id,
-      { title, text, status },
-      { new: true }
-    );
+    const { domainId, title, text, status } = req.body;
+    const updateFields = { dtUp: Date.now() };
 
+    let document = await Document.findById(req.params.id);
     if (!document) {
       return res.status(404).json({ message: "Document not found" });
     }
+
+    // Confirm If Domain Exists
+    if (domainId != null) {
+      const domain = await Domain.findById(domainId);
+      if (!domain) return res.status(404).json({ message: "Domain not found" });
+      updateFields.domainId = domain._id;
+    }
+
+    // Confirm If Required Fields != NULL
+    if (title != null) updateFields.title = title.trim();
+    if (text != null) updateFields.text = text.trim();
+    // Confirm If new_Status != old_Status
+    if (status != null && document.status != status) {
+      updateFields.status = status.trim();
+      updateFields.dtStatus = Date.now();
+    }
+
+    await document.set(updateFields).save();
+
     return res.json(document);
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ type: error.name, message: error.message });
-  }
-};
-
-exports.deleteDoc = async function (req, res) {
-  try {
-    const document = await Document.findById(req.params.id);
-    if (!document) {
-      return res.status(404).json({ message: "Document not found" });
-    }
-    // document.markedForDeletion = true; // Don't have markedForDeletion field
-    await document.save();
-    return res.status(204).end();
   } catch (error) {
     console.error(error);
     return res.status(500).json({ type: error.name, message: error.message });

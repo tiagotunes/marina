@@ -36,7 +36,7 @@ const usersRouter = require("./routes/users");
 
 app.use(`${api}/admin`, adminRouter);
 app.use(`${api}/`, authRouter);
-app.use(`${api}/docs`, docsRouter);
+app.use(`${api}/documents`, docsRouter);
 app.use(`${api}/domains`, domainsRouter);
 app.use(`${api}/tasks`, tasksRouter);
 app.use(`${api}/users`, usersRouter);

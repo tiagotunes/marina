@@ -5,7 +5,7 @@ exports.getUserCount = async function (req, res) {
   try {
     const userCount = await User.countDocuments();
     if (!userCount) {
-      return res.status(500).json({ message: "Could not count users." });
+      return res.status(500).json({ message: "Could not count users" });
     }
     return res.json({ userCount });
   } catch (error) {
