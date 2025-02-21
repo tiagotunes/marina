@@ -1,5 +1,9 @@
 const { Domain } = require("../models/domain");
 
+/*------------------------------------------------------------------------
+  GET 
+  /domains
+------------------------------------------------------------------------*/
 exports.getDomains = async function (_, res) {
   try {
     let domains = await Domain.find({ status: "A" });
@@ -11,6 +15,10 @@ exports.getDomains = async function (_, res) {
   }
 };
 
+/*------------------------------------------------------------------------
+  GET 
+  /domains/:id
+------------------------------------------------------------------------*/
 exports.getDomainById = async function (req, res) {
   try {
     let domain = await Domain.findById(req.params.id);

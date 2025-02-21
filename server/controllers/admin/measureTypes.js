@@ -1,6 +1,10 @@
 const { MeasureType } = require("../../models/measure_type");
 
-exports.getMTypes = async function (req, res) {
+/*------------------------------------------------------------------------
+  GET 
+  /measureTypes
+------------------------------------------------------------------------*/
+exports.getMeasureTypes = async function (_, res) {
   try {
     const mts = await MeasureType.find({ status: "A" }).sort({ dtStatus: -1 });
     if (!mts)
@@ -12,9 +16,28 @@ exports.getMTypes = async function (req, res) {
   }
 };
 
-exports.getMTCounts = async function (req, res) {};
+/*------------------------------------------------------------------------
+  GET 
+  /measureTypes/count
+------------------------------------------------------------------------*/
+exports.getMeasureTypesCounts = async function (_, res) {
+  try {
+    const mtCount = await MeasureType.countDocuments();
+    if (!mtCount) {
+      return res.status(500).json({ message: "Could not count measure types" });
+    }
+    return res.json(mtCount);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ type: error.name, message: error.message });
+  }
+};
 
-exports.addMType = async function (req, res) {
+/*------------------------------------------------------------------------
+  POST 
+  /measureTypes
+------------------------------------------------------------------------*/
+exports.addMeasureType = async function (req, res) {
   try {
     let mt = new MeasureType({
       name: req.body.name,

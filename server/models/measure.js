@@ -6,7 +6,7 @@ const measureSchema = Schema({
     required: true,
     ref: "MeasureType",
   },
-  value: { type: Number, default: 0, required: true },
+  value: { type: Number, required: true, default: 0, max: 5 },
   dtCr: { type: Date, default: Date.now() },
   dtUp: Date,
 });

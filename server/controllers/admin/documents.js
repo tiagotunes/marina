@@ -33,10 +33,8 @@ exports.getDocuments = async function (req, res) {
 exports.getDocumentsCount = async function (req, res) {
   try {
     const docsCount = await Document.countDocuments();
-
     if (!docsCount)
       return res.status(500).json({ message: "Could not count documents" });
-
     return res.json(docsCount);
   } catch (error) {
     console.error(error);

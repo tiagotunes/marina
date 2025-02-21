@@ -5,6 +5,7 @@ const usersController = require("../controllers/users");
 
 router.get("/", usersController.getUsers);
 router.get("/:id", usersController.getUserById);
+router.get("/:id/tasks", usersController.getUserTaks);
 router.put("/:id", usersController.editUser);
 
 module.exports = router;

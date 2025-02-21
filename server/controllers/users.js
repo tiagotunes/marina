@@ -1,4 +1,5 @@
 const { User } = require("../models/user");
+const { Task } = require("../models/task");
 
 /*------------------------------------------------------------------------
   GET 
@@ -14,7 +15,7 @@ exports.getUsers = async (_, res) => {
     }
     return res.json(users);
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     return res.status(500).json({ type: error.name, message: error.message });
   }
 };
@@ -34,7 +35,33 @@ exports.getUserById = async (req, res) => {
     }
     return res.json(user);
   } catch (error) {
-    console.error(error);
+    // console.error(error);
+    return res.status(500).json({ type: error.name, message: error.message });
+  }
+};
+
+/*------------------------------------------------------------------------
+  GET 
+  /users/:id/tasks
+------------------------------------------------------------------------*/
+exports.getUserTaks = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const tasks = await Task.find({ userId: user._id })
+      .select("docId read dtDeadline status")
+      .populate({ path: docId, select: "title" })
+      .sort({ dtDeadline: -1 });
+    if (!tasks) {
+      return res.status(404).json({ message: "Tasks not found" });
+    }
+
+    return res.json(tasks);
+  } catch (error) {
+    // console.error(error);
     return res.status(500).json({ type: error.name, message: error.message });
   }
 };
@@ -68,7 +95,7 @@ exports.editUser = async (req, res) => {
     }
     return res.status(204).end();
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     return res.status(500).json({ type: error.name, message: error.message });
   }
 };

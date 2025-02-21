@@ -1,5 +1,9 @@
 const { Domain } = require("../../models/domain");
 
+/*------------------------------------------------------------------------
+  POST 
+  /domains
+------------------------------------------------------------------------*/
 exports.addDomain = async function (req, res) {
   try {
     const { name, status } = req.body;

@@ -1,9 +1,7 @@
 const express = require("express");
-
 const router = express.Router();
 
 const authController = require("../controllers/auth");
-
 const { body } = require("express-validator");
 
 const validateUser = [
@@ -28,16 +26,11 @@ const validatePassword = [
     ),
 ];
 
-router.post("/login", authController.login);
-
-router.post("/register", validateUser, authController.register);
-
 router.get("/verify-token", authController.verifyToken);
-
 router.post("/forgot-password", authController.forgotPassword);
-
-router.post("/verify-otp", authController.verifyPasswordResetOTP);
-
+router.post("/login", authController.login);
+router.post("/register", validateUser, authController.register);
 router.post("/reset-password", validatePassword, authController.resetPassword);
+router.post("/verify-otp", authController.verifyPasswordResetOTP);
 
 module.exports = router;

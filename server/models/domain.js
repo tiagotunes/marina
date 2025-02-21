@@ -1,9 +1,17 @@
 const { Schema, model } = require("mongoose");
 
 const domainSchema = Schema({
-  name: { type: String, required: true },
-  status: { type: String, required: true },
-  plannedStatus: { type: String, required: true },
+  name: { type: String, required: true, trim: true },
+  status: {
+    type: String,
+    required: true,
+    enum: ["active", "inactive", "delete"],
+  },
+  plannedStatus: {
+    type: String,
+    required: true,
+    enum: ["active", "inactive", "delete"],
+  },
   dtStatus: { type: Date, default: Date.now() },
   dtCr: { type: Date, default: Date.now() },
   dtUp: Date,

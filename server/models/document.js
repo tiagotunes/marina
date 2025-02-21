@@ -4,7 +4,7 @@ const documentSchema = Schema({
   domainId: { type: Schema.Types.ObjectId, required: true, ref: "Domain" },
   title: { type: String, required: true, trim: true },
   text: { type: String, required: true, trim: true },
-  status: { type: String, required: true },
+  status: { type: String, required: true, enum: ["open", "close"] },
   dtStatus: { type: Date, default: Date.now() },
   dtCr: { type: Date, default: Date.now() },
   dtUp: Date,
