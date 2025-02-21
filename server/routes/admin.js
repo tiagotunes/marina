@@ -26,8 +26,8 @@ router.get("/tasks", tasksController.getTasks);
 router.get("/tasks/count", tasksController.getTasksCount);
 
 // MEASURE TYPES
-router.get("/measureTypes", mtController.getMTypes);
-router.get("/measureTypes/count", mtController.getMTCounts);
-router.post("/measureTypes", mtController.addMType);
+router.get("/measureTypes", mtController.getMeasureTypes);
+router.get("/measureTypes/count", mtController.getMeasureTypesCounts);
+router.post("/measureTypes", mtController.addMeasureType);
 
 module.exports = router;
