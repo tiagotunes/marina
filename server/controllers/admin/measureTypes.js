@@ -6,7 +6,7 @@ const { MeasureType } = require("../../models/measure_type");
 ------------------------------------------------------------------------*/
 exports.getMeasureTypes = async function (_, res) {
   try {
-    const mts = await MeasureType.find({ status: "A" }).sort({ dtStatus: -1 });
+    const mts = await MeasureType.find();
     if (!mts)
       return res.status(404).json({ message: "Measure types not found" });
     return res.json(mts);

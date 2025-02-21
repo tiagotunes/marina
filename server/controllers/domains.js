@@ -6,7 +6,7 @@ const { Domain } = require("../models/domain");
 ------------------------------------------------------------------------*/
 exports.getDomains = async function (_, res) {
   try {
-    let domains = await Domain.find({ status: "A" });
+    let domains = await Domain.find({ status: "active" });
     if (!domains) return res.status(404).json({ message: "Domains not found" });
     return res.json(domains);
   } catch (error) {

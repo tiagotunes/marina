@@ -42,7 +42,7 @@ cron.schedule("0 0 * * *", async function () {
 
     const docs = await Document.find({ status: "O" });
     const users = await User.find({ status: "active", admin: false });
-    const measureTypes = await MeasureType.find({ status: "A" });
+    const measureTypes = await MeasureType.find({ status: "active" });
 
     if (!docs || !users || !measureTypes) {
       console.log("[CREATE_TASKS] No new tasks to create");
