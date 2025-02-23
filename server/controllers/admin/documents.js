@@ -7,16 +7,55 @@ const { Domain } = require("../../models/domain");
 ------------------------------------------------------------------------*/
 exports.getDocuments = async function (req, res) {
   try {
+    let docs;
     const page = req.query.page || 1;
     const pageSize = 10; // req.query.pageSize ?
-    const docs = await Document.find()
-      .select("-dtStatus -dtCr")
-      .populate({
-        path: "domainId",
-        select: "name",
-      })
-      .skip((page - 1) * pageSize)
-      .limit(pageSize);
+
+    if (req.query.criteria) {
+      let query = {};
+      if (req.query.domain) {
+        query["domain"] = req.query.domain;
+      }
+      switch (req.query.criteria) {
+        case "new": {
+          const daysAgo = new Date();
+          daysAgo.setDate(daysAgo.getDate() - 7);
+          query["dtCr"] = { $gte: daysAgo };
+          break;
+        }
+        default:
+          break;
+      }
+      docs = await Document.find(query)
+        .select("-dtCr -dtUp")
+        .populate({
+          path: "domainId",
+          select: "name",
+        })
+        .sort({ dtStatus: -1 })
+        .skip((page - 1) * pageSize)
+        .limit(pageSize);
+    } else if (req.query.domain) {
+      docs = await Document.find({ domain: req.query.domain })
+        .select("-dtCr -dtUp")
+        .populate({
+          path: "domainId",
+          select: "name",
+        })
+        .sort({ dtStatus: -1 })
+        .skip((page - 1) * pageSize)
+        .limit(pageSize);
+    } else {
+      docs = await Document.find()
+        .select("-dtCr -dtUp")
+        .populate({
+          path: "domainId",
+          select: "name",
+        })
+        .sort({ dtStatus: -1 })
+        .skip((page - 1) * pageSize)
+        .limit(pageSize);
+    }
 
     if (!docs) return res.status(404).json({ message: "Documents not found" });
     return res.json(docs);
@@ -43,6 +82,45 @@ exports.getDocumentsCount = async function (req, res) {
 };
 
 /*------------------------------------------------------------------------
+  GET
+  /admin/documents/search
+------------------------------------------------------------------------*/
+exports.searchDocuments = async function (req, res) {
+  try {
+    const searchTerm = req.query.q;
+    // if (!searchTerm) {} make sense?
+
+    const page = req.query.page || 1;
+    const pageSize = 10;
+
+    let query = {};
+    if (req.query.domain) {
+      query = { domain: req.query.domain };
+    }
+
+    if (searchTerm) {
+      query = {
+        ...query,
+        $text: {
+          $search: searchTerm,
+          $language: "portuguese",
+          $caseSensitive: false,
+        },
+      };
+    }
+
+    const searchResults = await Document.find(query)
+      .skip((page - 1) * pageSize)
+      .limit(pageSize);
+
+    return res.json(searchResults);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ type: error.name, message: error.message });
+  }
+};
+
+/*------------------------------------------------------------------------
   POST 
   /admin/documents
 ------------------------------------------------------------------------*/
@@ -53,17 +131,15 @@ exports.addDocument = async function (req, res) {
     const domain = await Domain.findById(domainId);
     if (!domain) return res.status(404).json({ message: "Domain not found" });
 
-    let document = new Document({
+    const document = new Document({
       domainId: domain._id,
       title: title.trim(),
       text: text.trim(),
       status: status.trim(),
-    });
-    document = await document.save();
+    }).save();
+
     if (!document) {
-      return res
-        .status(500)
-        .json({ message: "The document could not be created" });
+      return res.status(500).json({ message: "Document could not be created" });
     }
 
     res.status(201).json(document);

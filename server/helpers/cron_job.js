@@ -12,20 +12,38 @@ cron.schedule("0 0 * * *", async function () {
   try {
     console.log("[UPDATE_DOMAINS] Running at ", new Date());
 
-    let domainsToBeUpdated = await Domain.find();
-    domainsToBeUpdated = domainsToBeUpdated.filter(
-      (domain) => domain.status != domain.plannedStatus
-    );
+    let domainsToBeUpdated = await Domain.find({
+      status: { $ne: "$plannedStatus" },
+    });
 
-    for (const domain of domainsToBeUpdated) {
-      const domainDocumentsCount = await Document.countDocuments({
-        domainId: domain.id,
-      });
-      if (domainDocumentsCount < 1) {
-        domain.status = domain.plannedStatus;
-        domain.save();
+    if (domainsToBeUpdated.length !== 0) {
+      // Prepare bulk update operations and execution
+      const bulkDomainOps = domainsToBeUpdated.map((domain) => ({
+        updateOne: {
+          filter: { _id: domain._id },
+          update: { status: domain.plannedStatus, dtStatus: Date.now() },
+        },
+      }));
+      await Domain.bulkWrite(bulkDomainOps);
+
+      // Get all inactive domain IDs
+      const inactiveDomainIds = domainsToBeUpdated
+        .filter((d) => d.plannedStatus === "inactive")
+        .map((d) => d._id);
+
+      if (inactiveDomainIds.length > 0) {
+        const updateResult = await Document.updateMany(
+          { domainId: { $in: inactiveDomainIds } },
+          { status: "close" }
+        );
       }
+      console.log(
+        `[UPDATE_DOMAINS] Running at ${new Date()}, Closed ${
+          updateResult.modifiedCount
+        } documents`
+      );
     }
+
     console.log(
       `[UPDATE_DOMAINS] Completed at ${new Date()}, Updated ${
         domainsToBeUpdated.length
@@ -40,7 +58,7 @@ cron.schedule("0 0 * * *", async function () {
   try {
     console.log("[CREATE_TASKS] Running at ", new Date());
 
-    const docs = await Document.find({ status: "O" });
+    const docs = await Document.find({ status: "open" });
     const users = await User.find({ status: "active", admin: false });
     const measureTypes = await MeasureType.find({ status: "active" });
 

@@ -41,13 +41,11 @@ userSchema.pre("findOneAndDelete", async function (next) {
   const measureIds = tasks.flatMap((task) => task.measures);
   // console.log(measureIds);
 
-  // NOT TESTED
-  // Delete all measures associated with the tasks
-  // await Measure.deleteMany({ _id: { $in: measureIds } });
+  // Delete all measures associated with the tasks -- NOT TESTED
+  await Measure.deleteMany({ _id: { $in: measureIds } });
 
-  // NOT TESTED
-  // Delete all tasks assigned to the user
-  // await Task.deleteMany({ userId: user._id });
+  // Delete all tasks assigned to the user -- NOT TESTED
+  await Task.deleteMany({ userId: user._id });
 
   next();
 });

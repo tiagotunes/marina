@@ -18,6 +18,7 @@ router.post("/domains", domainsController.addDomain);
 // DOCUMENTS
 router.get("/documents", docsController.getDocuments);
 router.get("/documents/count", docsController.getDocumentsCount);
+router.get("/documents/search", docsController.searchDocuments);
 router.post("/documents", docsController.addDocument);
 router.put("/documents/:id", docsController.editDocument);
 

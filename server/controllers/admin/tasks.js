@@ -7,7 +7,7 @@ const { Task } = require("../../models/task");
 exports.getTasks = async function (req, res) {
   try {
     const tasks = await Task.find()
-      .select("-dtCr -dtUp")
+      .select("-measures -dtCr -dtUp")
       .populate({
         path: "docId",
         select: "title",
@@ -15,14 +15,6 @@ exports.getTasks = async function (req, res) {
       .populate({
         path: "userId",
         select: "name role",
-      })
-      .populate({
-        path: "measures",
-        select: "value",
-        populate: {
-          path: "measureTypeId",
-          select: "name",
-        },
       })
       .sort({ dtDeadline: -1 });
 
