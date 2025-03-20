@@ -14,7 +14,7 @@ const userSchema = Schema({
   status: {
     type: String,
     required: true,
-    enum: ["active", "inactive", "delete"],
+    enum: ["active", "inactive"],
   },
   admin: { type: Boolean, default: false },
   dtCr: { type: Date, default: Date.now() },

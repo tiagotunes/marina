@@ -1,5 +1,4 @@
 const { User } = require("../models/user");
-const { Task } = require("../models/task");
 
 /*------------------------------------------------------------------------
   GET 
@@ -7,9 +6,9 @@ const { Task } = require("../models/task");
 ------------------------------------------------------------------------*/
 exports.getUsers = async (_, res) => {
   try {
-    const users = await User.find({ status: "active", admin: false }).select(
-      "name email gender domains status"
-    );
+    const users = await User.find({ status: "active", admin: false })
+      .select("name gender domains")
+      .populate({ path: "domains", select: "name" });
     if (!users) {
       return res.status(404).json({ message: "Users not found" });
     }
@@ -26,9 +25,9 @@ exports.getUsers = async (_, res) => {
 ------------------------------------------------------------------------*/
 exports.getUserById = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id).select(
-      "-passwordHash -resetPasswordOtp -dtResetPasswordOtp -dtCr -dtUp"
-    );
+    const user = await User.findById(req.params.id)
+      .select("-passwordHash -resetPasswordOtp -dtResetPasswordOtp -dtCr -dtUp")
+      .populate({ path: "domains", select: "name" });
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -62,7 +61,7 @@ exports.editUser = async (req, res) => {
       );
 
       if (!user) {
-        return res.status(404).json({ message: "Users not found" });
+        return res.status(404).json({ message: "User not found" });
       }
       user.passwordHash = undefined;
       return res.json(user);

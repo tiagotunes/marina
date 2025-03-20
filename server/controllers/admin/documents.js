@@ -1,10 +1,11 @@
 const { Document } = require("../../models/document");
 const { Domain } = require("../../models/domain");
 
-/*------------------------------------------------------------------------
-  GET 
-  /admin/documents
-------------------------------------------------------------------------*/
+/**-----------------------------------------------------------------------------------
+  * * GET -> /admin/documents
+  Handles the GET request to retrieve a list of documents 
+  based on certain criteria
+----------------------------------------------------------------------------------**/
 exports.getDocuments = async function (req, res) {
   try {
     let docs;
@@ -38,20 +39,14 @@ exports.getDocuments = async function (req, res) {
     } else if (req.query.domain) {
       docs = await Document.find({ domain: req.query.domain })
         .select("-dtCr -dtUp")
-        .populate({
-          path: "domainId",
-          select: "name",
-        })
+        .populate({ path: "domainId", select: "name" })
         .sort({ dtStatus: -1 })
         .skip((page - 1) * pageSize)
         .limit(pageSize);
     } else {
       docs = await Document.find()
         .select("-dtCr -dtUp")
-        .populate({
-          path: "domainId",
-          select: "name",
-        })
+        .populate({ path: "domainId", select: "name" })
         .sort({ dtStatus: -1 })
         .skip((page - 1) * pageSize)
         .limit(pageSize);
@@ -65,10 +60,28 @@ exports.getDocuments = async function (req, res) {
   }
 };
 
-/*------------------------------------------------------------------------
-  GET
-  /admin/documents/count
-------------------------------------------------------------------------*/
+/**----------------------------------------------------------------------------------
+  * * GET -> /admin/documents/:id
+  Handles the GET request to fetch a specific document by its ID
+----------------------------------------------------------------------------------**/
+exports.getDocumentById = async function (req, res) {
+  try {
+    const document = await Document.findById(req.params.id)
+      .select("-dtStatus -dtCri")
+      .populate("domainId", "name");
+    if (!document)
+      return res.status(404).json({ message: "Document not found" });
+    return res.json(document);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ type: error.name, message: error.message });
+  }
+};
+
+/**----------------------------------------------------------------------------------
+  * * GET -> /admin/documents/count
+  Handles the GET request to retrieve the total count of documents in the database
+----------------------------------------------------------------------------------**/
 exports.getDocumentsCount = async function (req, res) {
   try {
     const docsCount = await Document.countDocuments();
@@ -81,10 +94,11 @@ exports.getDocumentsCount = async function (req, res) {
   }
 };
 
-/*------------------------------------------------------------------------
-  GET
-  /admin/documents/search
-------------------------------------------------------------------------*/
+/**----------------------------------------------------------------------------------
+  * * GET -> /admin/documents/search
+  Handle the GET request to search for documents 
+  based on a search term and optional domain criteria.
+----------------------------------------------------------------------------------**/
 exports.searchDocuments = async function (req, res) {
   try {
     const searchTerm = req.query.q;
@@ -120,10 +134,10 @@ exports.searchDocuments = async function (req, res) {
   }
 };
 
-/*------------------------------------------------------------------------
-  POST 
-  /admin/documents
-------------------------------------------------------------------------*/
+/**----------------------------------------------------------------------------------
+  * * POST -> /admin/documents
+  Handle the POST request to add a new document to the database
+----------------------------------------------------------------------------------**/
 exports.addDocument = async function (req, res) {
   try {
     const { domainId, title, text, status } = req.body;
@@ -131,13 +145,13 @@ exports.addDocument = async function (req, res) {
     const domain = await Domain.findById(domainId);
     if (!domain) return res.status(404).json({ message: "Domain not found" });
 
-    const document = new Document({
+    let document = new Document({
       domainId: domain._id,
       title: title.trim(),
       text: text.trim(),
       status: status.trim(),
-    }).save();
-
+    });
+    document = await document.save();
     if (!document) {
       return res.status(500).json({ message: "Document could not be created" });
     }
@@ -149,37 +163,46 @@ exports.addDocument = async function (req, res) {
   }
 };
 
-/*------------------------------------------------------------------------
-  PUT 
-  /admin/documents/:id
-------------------------------------------------------------------------*/
+/**----------------------------------------------------------------------------------
+  * * PUT -> /admin/documents/:id
+  Handle the PUT request to update a specific document in the database
+----------------------------------------------------------------------------------**/
 exports.editDocument = async function (req, res) {
   try {
-    const { domainId, title, text, status } = req.body;
-    const updateFields = { dtUp: Date.now() };
+    const domain = await Domain.findById(req.body.domainId);
+    // Confirm if Domain exists and is active
+    if (!domain) return res.status(404).json({ message: "Domain not found" });
+    if (domain.status != "active")
+      return res.status(406).json({ message: "Domain inactive" });
 
-    // Confirm If Domain Exists
-    if (domainId != null) {
-      const domain = await Domain.findById(domainId);
-      if (!domain) return res.status(404).json({ message: "Domain not found" });
-      updateFields.domainId = domain._id;
-    }
-
-    // Confirm If Required Fields != NULL
-    if (title != null) updateFields.title = title.trim();
-    if (text != null) updateFields.text = text.trim();
-    // Confirm If new_Status != old_Status
-    if (status != null && document.status != status) {
-      updateFields.status = status.trim();
-      updateFields.dtStatus = Date.now();
-    }
-
-    const document = await Document.findByIdAndUpdate(userId, updateFields, {
-      new: true,
-    });
-    if (!document) return res.status(404).json({ message: "User not found" });
+    const document = await Document.findByIdAndUpdate(
+      userId,
+      { ...req.body, dtup: Date.now() },
+      { new: true, runValidators: true }
+    );
+    if (!document)
+      return res.status(404).json({ message: "Document not found" });
 
     return res.json(document);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ type: error.name, message: error.message });
+  }
+};
+
+/**----------------------------------------------------------------------------------
+  * * DELETE -> /admin/documents/:id
+  Handle the DELETE request to delete a specific document from the database
+----------------------------------------------------------------------------------**/
+/* The `exports.deleteDocument` function is .
+Here's a breakdown of what the function does: */
+exports.deleteDocument = async function (req, res) {
+  try {
+    const document = await Domain.findOneAndDelete({ _id: req.params.id });
+    if (!document)
+      return res.status(404).json({ message: "Document not found" });
+
+    return res.status(204).end();
   } catch (error) {
     console.error(error);
     return res.status(500).json({ type: error.name, message: error.message });

@@ -15,7 +15,7 @@ const taskSchema = Schema({
   status: {
     type: String,
     required: true,
-    enum: ["input", "save", "close", "delete"],
+    enum: ["input", "save", "submit"],
   },
   comment: { type: String, trim: true },
   dtCr: { type: Date, default: Date.now() },

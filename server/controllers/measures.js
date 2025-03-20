@@ -2,11 +2,10 @@ const { default: mongoose } = require("mongoose");
 const jwt = require("jsonwebtoken");
 const { Task } = require("../models/task");
 const { Measure } = require("../models/measure");
-const { MeasureType } = require("../models/measure_type");
 
 /*------------------------------------------------------------------------
   GET 
-  /tasks/:id
+  /tasks/:id/measures
 ------------------------------------------------------------------------*/
 exports.getMeasures = async function (req, res) {
   try {
@@ -31,26 +30,21 @@ exports.getMeasures = async function (req, res) {
 };
 
 /*------------------------------------------------------------------------
-  POST 
-  /tasks/:id/measures
+  PUT 
+  /tasks/:id/measures/:measureId
 ------------------------------------------------------------------------*/
-exports.addMeasure = async function (req, res) {
+exports.editMeasure = async function (req, res) {
   try {
     let task = await Task.findById(req.params.id);
     if (!task) return res.status(404).json({ message: "Task not found" });
 
-    const measureType = await MeasureType.findById(req.body.measureTypeId);
-    if (!measureType)
-      return res.status(404).json({ message: "Measure Type not found" });
+    let measure = await Measure.findByIdAndUpdate(
+      req.params.measureId,
+      { value: req.body.value, dtU: Date.now() },
+      { new: true, runValidators: true }
+    );
+    if (!measure) return res.status(404).json({ message: "Measure not found" });
 
-    const measure = await new Measure({
-      measureTypeId: measureType._id,
-    }).save();
-    if (!measure) {
-      return res.status(500).json({ message: "Measure could not be created" });
-    }
-
-    task.measures.push(measure.id);
     task = await task.save();
 
     return res.status(201).json({ task, measure });

@@ -1,4 +1,5 @@
 const cron = require("node-cron");
+const { default: mongoose } = require("mongoose");
 const { Domain } = require("../models/domain");
 const { Document } = require("../models/document");
 const { User } = require("../models/user");
@@ -6,11 +7,23 @@ const { Task } = require("../models/task");
 const { MeasureType } = require("../models/measure_type");
 const { Measure } = require("../models/measure");
 
-// "minute hour dayOfMonth month dayOfWeek"
+function getDate() {
+  return new Date().toString().split(" GMT")[0];
+}
 
-cron.schedule("0 0 * * *", async function () {
+/**---------------------------------------------------------------------------------
+ * * Setting up cron job schedules.
+ * cron.schedule("<minute> <hour> <dayOfMonth> <month> <dayOfWeek>", () => ())
+ ---------------------------------------------------------------------------------**/
+cron.schedule("0 0 * * *", () => updateDomains());
+cron.schedule("0 8 * * *", () => createTasks());
+
+/**---------------------------------------------------------------------------------
+ * * Updates domain status and closes associated documents based on certain conditions.
+ ---------------------------------------------------------------------------------**/
+async function updateDomains() {
   try {
-    console.log("[UPDATE_DOMAINS] Running at ", new Date());
+    console.log(`[UPDATE_DOMAINS] ${getDate()} Running`);
 
     let domainsToBeUpdated = await Domain.find({
       status: { $ne: "$plannedStatus" },
@@ -38,90 +51,106 @@ cron.schedule("0 0 * * *", async function () {
         );
       }
       console.log(
-        `[UPDATE_DOMAINS] Running at ${new Date()}, Closed ${
+        `[UPDATE_DOMAINS] ${getDate()} Closed ${
           updateResult.modifiedCount
         } documents`
       );
     }
 
     console.log(
-      `[UPDATE_DOMAINS] Completed at ${new Date()}, Updated ${
+      `[UPDATE_DOMAINS] ${getDate()} ${
         domainsToBeUpdated.length
-      } domains`
+      } domains updated`
     );
+
+    console.log(`[UPDATE_DOMAINS] ${getDate()} Finish`);
   } catch (error) {
-    console.error("[UPDATE_DOMAINS] Error: ", error);
+    console.error(`[UPDATE_DOMAINS] ${getDate()} ERROR: ${error}`);
   }
-});
+}
 
-cron.schedule("0 0 * * *", async function () {
+/**---------------------------------------------------------------------------------
+ * * Generates tasks for active users based on open documents and active measure types.
+ ---------------------------------------------------------------------------------*/
+async function createTasks(userId = null) {
   try {
-    console.log("[CREATE_TASKS] Running at ", new Date());
+    if (!userId) console.log(`[CREATE_TASKS] ${getDate()} Running`);
 
-    const docs = await Document.find({ status: "open" });
-    const users = await User.find({ status: "active", admin: false });
-    const measureTypes = await MeasureType.find({ status: "active" });
+    const [docs, measureTypes] = await Promise.all([
+      Document.find({ status: "open" }),
+      MeasureType.find({ status: "active" }),
+    ]);
 
-    if (!docs || !users || !measureTypes) {
-      console.log("[CREATE_TASKS] No new tasks to create");
-      return;
+    if (!docs.length || !measureTypes.length) {
+      if (!userId)
+        console.log(
+          `[CREATE_TASKS] ${getDate()} No documents or measure types available`
+        );
+      return false;
     }
 
-    const tasksToInsert = [];
-    const measuresToInsert = [];
+    const users = userId
+      ? [await User.findOne({ _id: userId, status: "active", admin: false })]
+      : await User.find({ status: "active", admin: false });
+
+    if (!users.length || !users[0]) {
+      if (!userId)
+        console.log(
+          `[CREATE_TASKS] ${getDate()} No valid users found for userId: ${userId}`
+        );
+      return false;
+    }
+
+    const measuresToInsert = measureTypes.map((mType) => ({
+      measureTypeId: mType._id,
+    }));
+
+    let taskCount = 0;
 
     for (const doc of docs) {
       for (const user of users) {
         const existingTask = await Task.findOne({
-          docId: doc.id,
-          userId: user.id,
+          docId: doc._id,
+          userId: user._id,
         });
-        if (!existingTask) {
-          const taskId = new Task()._id;
+        if (existingTask) continue;
 
-          // Create measures associated with this task
-          const measures = measureTypes.map((mType) => ({
-            measureTypeId: mType._id,
-            taskId: taskId,
-          }));
-          measuresToInsert.push(...measures);
+        const insertedMeasures = await Measure.insertMany(measuresToInsert);
 
-          // Create new Task
-          tasksToInsert.push({
-            _id: taskId,
-            docId: doc.id,
-            userId: user.id,
-            dtDeadline: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
-            status: "I",
-            measures: measures.map((m) => m._id),
-          });
+        const task = await new Task({
+          docId: doc._id,
+          userId: user._id,
+          measures: insertedMeasures,
+          status: "input",
+        }).save();
+        if (!task) {
+          if (!userId)
+            console.error(
+              `[CREATE_TASKS] ${getDate()} ERROR: Could not create Task ${
+                doc._id
+              } ${user._id}`
+            );
+          return false;
         }
+        if (!userId)
+          console.log(
+            `[CREATE_TASKS] ${getDate()} Created Task ${task._id} with ${
+              measuresToInsert.length
+            } measures`
+          );
+        taskCount++;
       }
     }
 
-    // Insert measures and tasks
-    if (measuresToInsert.length) {
-      const insertedMeasures = await Measure.insertMany(measuresToInsert);
-      const measureMap = new Map(
-        insertedMeasures.map((m) => [m.taskId.toString(), m._id])
-      );
-
-      // Assign the correct measure IDs to tasks
-      tasksToInsert.forEach((task) => {
-        task.measures = measureMap.get(task._id.toString()) || [];
-      });
+    if (!userId) {
+      console.log(`[CREATE_TASKS] ${getDate()} ${taskCount} tasks created`);
+      console.log(`[CREATE_TASKS] ${getDate()} Finish`);
     }
-
-    if (tasksToInsert.length) {
-      await Task.insertMany(tasksToInsert);
-    }
-
-    console.log(
-      `[CREATE_TASKS] Completed at ${new Date()}, Created ${
-        tasksToInsert.length
-      } tasks`
-    );
+    return true;
   } catch (error) {
-    console.error("[CREATE_TASKS] Error: ", error);
+    if (!userId) console.error(`[CREATE_TASKS] ${getDate()} ERROR: ${error}`);
+    return false;
   }
-});
+}
+
+module.exports = { createTasks };

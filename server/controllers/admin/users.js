@@ -2,6 +2,26 @@ const { User } = require("../../models/user");
 
 /*------------------------------------------------------------------------
   GET 
+  /admin/users
+------------------------------------------------------------------------*/
+exports.getAllUsers = async function (_, res) {
+  try {
+    const users = await User.find().populate({
+      path: "domains",
+      select: "name",
+    });
+    if (!users) {
+      return res.status(404).json({ message: "Users not found" });
+    }
+    return res.json(users);
+  } catch (error) {
+    // console.error(error);
+    return res.status(500).json({ type: error.name, message: error.message });
+  }
+};
+
+/*------------------------------------------------------------------------
+  GET 
   /admin/users/count
 ------------------------------------------------------------------------*/
 exports.getUsersCount = async function (_, res) {
@@ -18,21 +38,16 @@ exports.getUsersCount = async function (_, res) {
 };
 
 /*------------------------------------------------------------------------
-  POST 
+  PUT 
   /admin/users/:id
 ------------------------------------------------------------------------*/
-exports.updateUser = async function (req, res) {
+exports.editUser = async function (req, res) {
   try {
-    const userId = req.params.id;
-    const { status } = req.body;
-
-    const updateFields = { dtUp: Date.now() };
-    if (status != null) updateFields.status = status.trim();
-
-    const user = await User.findByIdAndUpdate(userId, updateFields, {
-      new: true,
-      runValidators: true,
-    });
+    const user = await User.findByIdAndUpdate(
+      req.params.id,
+      { ...req.body, dtUp: Date.now() },
+      { new: true, runValidators: true }
+    );
     if (!user) return res.status(404).json({ message: "User not found" });
 
     return res.status(200).json(user);

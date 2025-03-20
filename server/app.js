@@ -29,14 +29,12 @@ app.use(errorHandler);
 // Routes
 const adminRouter = require("./routes/admin");
 const authRouter = require("./routes/auth");
-const docsRouter = require("./routes/documents");
 const domainsRouter = require("./routes/domains");
 const tasksRouter = require("./routes/tasks");
 const usersRouter = require("./routes/users");
 
 app.use(`${api}/admin`, adminRouter);
 app.use(`${api}/`, authRouter);
-app.use(`${api}/documents`, docsRouter);
 app.use(`${api}/domains`, domainsRouter);
 app.use(`${api}/tasks`, tasksRouter);
 app.use(`${api}/users`, usersRouter);

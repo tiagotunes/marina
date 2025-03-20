@@ -1,4 +1,8 @@
+const { User } = require("../models/user");
 const { Task } = require("../models/task");
+const { createTasks } = require("../helpers/cron_job");
+const { Document } = require("../models/document");
+const { MeasureType } = require("../models/measure_type");
 
 /*------------------------------------------------------------------------
   GET 
@@ -48,6 +52,70 @@ exports.getUserTaks = async (req, res) => {
     }
 
     return res.json(tasks);
+  } catch (error) {
+    // console.error(error);
+    return res.status(500).json({ type: error.name, message: error.message });
+  }
+};
+
+/*------------------------------------------------------------------------
+  GET 
+  /users/:id/tasks/count
+------------------------------------------------------------------------*/
+exports.getUserTasksCount = async function (req, res) {
+  try {
+    const taskCount = await Task.countDocuments({ userId: req.params.id });
+    if (!taskCount) {
+      return res.status(500).json({ message: "Could not count user tasks" });
+    }
+    return res.json({ taskCount });
+  } catch (error) {
+    // console.error(error);
+    return res.status(500).json({ type: error.name, message: error.message });
+  }
+};
+
+/*------------------------------------------------------------------------
+  POST 
+  /users/:id/tasks
+------------------------------------------------------------------------*/
+exports.addUserTaks = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    if (!createTasks(user._id))
+      return res
+        .status(500)
+        .json({ message: "Could not create new tasks for the user" });
+    return res.status(204).end();
+  } catch (error) {
+    // console.error(error);
+    return res.status(500).json({ type: error.name, message: error.message });
+  }
+};
+
+/*------------------------------------------------------------------------
+  POST 
+  /users/:id/tasks/:taskId
+------------------------------------------------------------------------*/
+exports.editUserTak = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const task = await Task.findByIdAndUpdate(
+      req.params.taskId,
+      { ...req.body, dtUp: Date.now() },
+      { new: true, runValidators: true }
+    );
+    if (!task) {
+      return res.status(404).json({ message: "Task not found" });
+    }
+    return res.json(task);
   } catch (error) {
     // console.error(error);
     return res.status(500).json({ type: error.name, message: error.message });

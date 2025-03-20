@@ -6,7 +6,7 @@ const measureTypeSchema = Schema({
   status: {
     type: String,
     required: true,
-    enum: ["active", "inactive", "delete"],
+    enum: ["active", "inactive"],
   },
   dtStatus: { type: Date, default: Date.now() },
   dtCr: { type: Date, default: Date.now() },

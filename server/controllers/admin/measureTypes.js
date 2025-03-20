@@ -62,3 +62,36 @@ exports.addMeasureType = async function (req, res) {
     return res.status(500).json({ type: error.name, message: error.message });
   }
 };
+
+/*------------------------------------------------------------------------
+  POST 
+  /measureTypes/:id
+------------------------------------------------------------------------*/
+exports.editMeasureType = async function (req, res) {
+  try {
+    const updateFields = { ...req.body, dtUp: Date.now() };
+
+    const mt = await MeasureType.findByIdAndUpdate(
+      req.params.id,
+      updateFields,
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+    if (!mt) {
+      return res.status(404).json({ message: "Measure type not found" });
+    }
+
+    return res.json(mt);
+  } catch (error) {
+    if (error.message.includes("name_1 dup key")) {
+      return res.status(409).json({
+        type: "IndexError",
+        message: "Measure type with that name already exists",
+      });
+    }
+    console.error(error);
+    return res.status(500).json({ type: error.name, message: error.message });
+  }
+};
