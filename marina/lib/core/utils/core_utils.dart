@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:marina/core/extensions/context_extensions.dart';
 
 abstract class CoreUtils {
   const CoreUtils();
@@ -8,8 +9,6 @@ abstract class CoreUtils {
     required Color lightModeColour,
     required Color darkModeColour,
   }) {
-    return MediaQuery.platformBrightnessOf(context) == Brightness.dark
-        ? darkModeColour
-        : lightModeColour;
+    return context.isDarkMode ? darkModeColour : lightModeColour;
   }
 }

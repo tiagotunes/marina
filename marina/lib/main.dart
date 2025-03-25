@@ -27,21 +27,10 @@ class MainApp extends StatelessWidget {
       title: 'Marina',
       themeMode: ThemeMode.system,
       theme: theme,
-      darkTheme: theme.copyWith(
-        scaffoldBackgroundColor: Colours.darkThemeBackgroundColour,
-        appBarTheme: AppBarTheme(
-          backgroundColor: Colours.darkThemeBackgroundColour,
-          foregroundColor: Colours.lightThemeWhiteColour,
-        ),
-      ),
+      darkTheme: theme,
       home: Scaffold(
         body: Center(
-          child: Text(
-            'Hello World!',
-            style: TextStyles.headingBold.copyWith(
-              color: Colours.classicAdaptiveTextColour(context),
-            ),
-          ),
+          child: Text('Hello World!', style: TextStyles.headingBold),
         ),
       ),
     );
