@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:marina/core/res/styles/colours.dart';
-import 'package:marina/core/res/styles/text.dart';
+import 'package:marina/core/services/injection_container.dart';
+import 'package:marina/core/services/router.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await init();
   runApp(const MainApp());
 }
 
@@ -24,8 +27,9 @@ class MainApp extends StatelessWidget {
       useMaterial3: true,
     );
 
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'MARINA',
+      routerConfig: router,
       themeMode: ThemeMode.system,
       theme: theme,
       darkTheme: theme.copyWith(
@@ -33,16 +37,6 @@ class MainApp extends StatelessWidget {
         appBarTheme: const AppBarTheme(
           backgroundColor: Colours.darkThemeBgdDark,
           foregroundColor: Colours.lightThemeWhiteColour,
-        ),
-      ),
-      home: Scaffold(
-        body: Center(
-          child: Text(
-            'Hello World!',
-            style: TextStyles.heading0.copyWith(
-              color: Colours.classicAdaptiveTextColour(context),
-            ),
-          ),
         ),
       ),
     );
