@@ -11,7 +11,7 @@ class CacheHelper {
   static const _sessionTokenKey = 'user-session-token';
   static const _userIdKey = 'user-id';
   static const _themeModeKey = 'theme-mode';
-  static const _firstTimeKey = 'first-time';
+  static const _firstTimeKey = 'user-first-time';
 
   Future<bool> cacheSessionToken(String token) async {
     try {
@@ -46,7 +46,9 @@ class CacheHelper {
     final sessionToken = _prefs.getString(_sessionTokenKey);
     if (sessionToken case String()) {
       Cache.instance.setSessionToken(sessionToken);
-    }
+    } /*else {
+      debugPrint('getSessionToken: session does not exist');
+    }*/
     return sessionToken;
   }
 

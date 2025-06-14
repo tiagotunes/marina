@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:marina/core/utils/core_utils.dart';
 
 abstract class Colours {
   static const Color lightThemePrimaryColour = Color(0xFF008391);
@@ -8,5 +9,14 @@ abstract class Colours {
 
   static const Color lightThemeWhiteColour = Color(0xFFFFFFFF);
 
-  static Color lightThemeBackgroundColour = Color(0xFFFFFFFF);
+  static const Color lightThemeTintStockColour = Color(0xFFF6F6F6);
+
+  static const Color darkThemeBgdDark = Color(0xFF18232A);
+
+  static Color classicAdaptiveTextColour(BuildContext context) =>
+      CoreUtils.adaptiveColour(
+        context,
+        lightModeColour: lightThemePrimaryTextColour,
+        darkModeColour: lightThemeWhiteColour,
+      );
 }

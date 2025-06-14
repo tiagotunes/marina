@@ -16,21 +16,33 @@ class MainApp extends StatelessWidget {
         seedColor: Colours.lightThemePrimaryColour,
       ),
       fontFamily: 'Jura',
-      scaffoldBackgroundColor: Colours.lightThemeBackgroundColour,
+      scaffoldBackgroundColor: Colours.lightThemeTintStockColour,
       appBarTheme: AppBarTheme(
-        backgroundColor: Colours.lightThemeBackgroundColour,
+        backgroundColor: Colours.lightThemeTintStockColour,
         foregroundColor: Colours.lightThemePrimaryTextColour,
       ),
       useMaterial3: true,
     );
+
     return MaterialApp(
-      title: 'Marina',
+      title: 'MARINA',
       themeMode: ThemeMode.system,
       theme: theme,
-      darkTheme: theme,
+      darkTheme: theme.copyWith(
+        scaffoldBackgroundColor: Colours.darkThemeBgdDark,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colours.darkThemeBgdDark,
+          foregroundColor: Colours.lightThemeWhiteColour,
+        ),
+      ),
       home: Scaffold(
         body: Center(
-          child: Text('Hello World!', style: TextStyles.headingBold),
+          child: Text(
+            'Hello World!',
+            style: TextStyles.heading0.copyWith(
+              color: Colours.classicAdaptiveTextColour(context),
+            ),
+          ),
         ),
       ),
     );
