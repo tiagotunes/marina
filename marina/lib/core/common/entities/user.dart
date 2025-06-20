@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:marina/core/common/entities/domain.dart';
+import 'package:marina/src/domain/domain/entities/domain.dart';
 
 class User extends Equatable {
   const User({

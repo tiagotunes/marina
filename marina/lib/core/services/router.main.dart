@@ -1,6 +1,9 @@
 part of 'router.dart';
 
+final rootNavigatorKey = GlobalKey<NavigatorState>();
+
 final router = GoRouter(
+  navigatorKey: rootNavigatorKey,
   debugLogDiagnostics: true,
   initialLocation: '/',
   routes: [
