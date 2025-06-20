@@ -1,12 +1,12 @@
 import 'package:equatable/equatable.dart';
 import 'package:marina/core/usecase/usecase.dart';
 import 'package:marina/core/utils/typedefs.dart';
-import 'package:marina/src/auth/domain/repositories/auth_repository.dart';
+import 'package:marina/src/auth/domain/repos/auth_repo.dart';
 
-class VerifyOTP extends UsecaseWithParam<void, VerifyOTPParams> {
+class VerifyOTP extends UsecaseWithParams<void, VerifyOTPParams> {
   const VerifyOTP(this._repo);
 
-  final AuthRepository _repo;
+  final AuthRepo _repo;
 
   @override
   ResultFuture<void> call(VerifyOTPParams params) =>

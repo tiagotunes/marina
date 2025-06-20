@@ -3,13 +3,13 @@ import 'package:marina/core/common/entities/user.dart';
 import 'package:marina/core/errors/exceptions.dart';
 import 'package:marina/core/errors/failures.dart';
 import 'package:marina/core/utils/typedefs.dart';
-import 'package:marina/src/auth/data/datasources/auth_remote_data_source.dart';
-import 'package:marina/src/auth/domain/repositories/auth_repository.dart';
+import 'package:marina/src/auth/data/datasources/auth_remote_data_src.dart';
+import 'package:marina/src/auth/domain/repos/auth_repo.dart';
 
-class AuthRepositoryImplementation implements AuthRepository {
-  const AuthRepositoryImplementation(this._remoteDataSource);
+class AuthRepoImpl implements AuthRepo {
+  const AuthRepoImpl(this._remoteDataSource);
 
-  final AuthRemoteDataSource _remoteDataSource;
+  final AuthRemoteDataSrc _remoteDataSource;
 
   @override
   ResultFuture<void> forgotPassword({required String email}) async {

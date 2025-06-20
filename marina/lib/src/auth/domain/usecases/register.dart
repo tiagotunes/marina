@@ -1,12 +1,12 @@
 import 'package:equatable/equatable.dart';
 import 'package:marina/core/usecase/usecase.dart';
 import 'package:marina/core/utils/typedefs.dart';
-import 'package:marina/src/auth/domain/repositories/auth_repository.dart';
+import 'package:marina/src/auth/domain/repos/auth_repo.dart';
 
-class Register extends UsecaseWithParam<void, RegisterParams> {
+class Register extends UsecaseWithParams<void, RegisterParams> {
   const Register(this._repo);
 
-  final AuthRepository _repo;
+  final AuthRepo _repo;
 
   @override
   ResultFuture<void> call(RegisterParams params) => _repo.register(

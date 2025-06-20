@@ -1,12 +1,12 @@
 import 'package:equatable/equatable.dart';
 import 'package:marina/core/usecase/usecase.dart';
 import 'package:marina/core/utils/typedefs.dart';
-import 'package:marina/src/auth/domain/repositories/auth_repository.dart';
+import 'package:marina/src/auth/domain/repos/auth_repo.dart';
 
-class ResetPassword extends UsecaseWithParam<void, ResetPasswordParams> {
+class ResetPassword extends UsecaseWithParams<void, ResetPasswordParams> {
   const ResetPassword(this._repo);
 
-  final AuthRepository _repo;
+  final AuthRepo _repo;
 
   @override
   ResultFuture<void> call(ResetPasswordParams params) =>

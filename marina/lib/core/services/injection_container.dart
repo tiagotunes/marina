@@ -1,8 +1,8 @@
 import 'package:get_it/get_it.dart';
 import 'package:marina/core/common/app/cache_helper.dart';
-import 'package:marina/src/auth/data/datasources/auth_remote_data_source.dart';
-import 'package:marina/src/auth/data/repositories/auth_repository_implementation.dart';
-import 'package:marina/src/auth/domain/repositories/auth_repository.dart';
+import 'package:marina/src/auth/data/datasources/auth_remote_data_src.dart';
+import 'package:marina/src/auth/data/repos/auth_repo_impl.dart';
+import 'package:marina/src/auth/domain/repos/auth_repo.dart';
 import 'package:marina/src/auth/domain/usecases/forgot_password.dart';
 import 'package:marina/src/auth/domain/usecases/login.dart';
 import 'package:marina/src/auth/domain/usecases/register.dart';

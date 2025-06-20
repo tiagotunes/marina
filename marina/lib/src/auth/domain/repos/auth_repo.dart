@@ -1,8 +1,8 @@
 import 'package:marina/core/common/entities/user.dart';
 import 'package:marina/core/utils/typedefs.dart';
 
-abstract class AuthRepository {
-  const AuthRepository();
+abstract class AuthRepo {
+  const AuthRepo();
 
   ResultFuture<void> forgotPassword({required String email});
   ResultFuture<User> login({required String email, required String password});

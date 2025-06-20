@@ -22,11 +22,9 @@ Future<void> _authInit() async {
     ..registerLazySingleton(() => ResetPassword(sl()))
     ..registerLazySingleton(() => VerifyOTP(sl()))
     ..registerLazySingleton(() => VerifyToken(sl()))
-    ..registerLazySingleton<AuthRepository>(
-      () => AuthRepositoryImplementation(sl()),
-    )
-    ..registerLazySingleton<AuthRemoteDataSource>(
-      () => AuthRemoteDataSourceImplementation(sl()),
+    ..registerLazySingleton<AuthRepo>(() => AuthRepoImpl(sl()))
+    ..registerLazySingleton<AuthRemoteDataSrc>(
+      () => AuthRemoteDataSrcImpl(sl()),
     )
     ..registerLazySingleton(http.Client.new);
 }

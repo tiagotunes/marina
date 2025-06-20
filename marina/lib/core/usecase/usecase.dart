@@ -1,7 +1,7 @@
 import 'package:marina/core/utils/typedefs.dart';
 
-abstract class UsecaseWithParam<Type, Params> {
-  const UsecaseWithParam();
+abstract class UsecaseWithParams<Type, Params> {
+  const UsecaseWithParams();
   ResultFuture<Type> call(Params params);
 }
 

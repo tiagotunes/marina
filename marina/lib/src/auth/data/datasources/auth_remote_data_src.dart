@@ -13,8 +13,8 @@ import 'package:marina/core/utils/error_response.dart';
 import 'package:marina/core/utils/network_utils.dart';
 import 'package:marina/core/utils/typedefs.dart';
 
-abstract class AuthRemoteDataSource {
-  const AuthRemoteDataSource();
+abstract class AuthRemoteDataSrc {
+  const AuthRemoteDataSrc();
 
   Future<void> forgotPassword({required String email});
 
@@ -44,8 +44,8 @@ const RESET_PASSWORD_ENDPOINT = '/reset-password';
 const VERIFY_OTP_ENDPOINT = '/verify-otp';
 const VERIFY_TOKEN_ENDPOINT = '/verify-token';
 
-class AuthRemoteDataSourceImplementation implements AuthRemoteDataSource {
-  const AuthRemoteDataSourceImplementation(this._client);
+class AuthRemoteDataSrcImpl implements AuthRemoteDataSrc {
+  const AuthRemoteDataSrcImpl(this._client);
   final http.Client _client;
 
   @override
