@@ -8,7 +8,7 @@
 PRODUCT_NAME = marina
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.tunes.marina
+PRODUCT_BUNDLE_IDENTIFIER = com.example.marina
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2025 com.tunes. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2025 com.example. All rights reserved.

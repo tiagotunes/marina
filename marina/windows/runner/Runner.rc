@@ -89,11 +89,11 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "com.tunes" "\0"
+            VALUE "CompanyName", "com.example" "\0"
             VALUE "FileDescription", "marina" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
             VALUE "InternalName", "marina" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2025 com.tunes. All rights reserved." "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2025 com.example. All rights reserved." "\0"
             VALUE "OriginalFilename", "marina.exe" "\0"
             VALUE "ProductName", "marina" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
