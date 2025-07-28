@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:marina/pages/on_boarding/on_boarding.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const MyHomePage(),
+      home: OnBoarding(),
     );
   }
 }
