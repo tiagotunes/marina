@@ -1,4 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+
 part 'on_boarding_notifier.g.dart';
 
 @riverpod

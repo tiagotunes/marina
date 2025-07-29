@@ -1,8 +1,7 @@
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:marina/common/utils/colours.dart';
-import 'package:marina/pages/notifier/on_boarding_notifier.dart';
+import 'package:marina/pages/on_boarding/notifier/on_boarding_notifier.dart';
 import 'package:marina/pages/on_boarding/widgets/on_boarding_page.dart';
 
 class OnBoarding extends ConsumerWidget {
@@ -15,7 +14,6 @@ class OnBoarding extends ConsumerWidget {
     final index = ref.watch(indexDotProvider);
 
     return Scaffold(
-      backgroundColor: Colors.white,
       body: SafeArea(
         child: Stack(
           alignment: Alignment.topCenter,
@@ -28,16 +26,19 @@ class OnBoarding extends ConsumerWidget {
               scrollDirection: Axis.horizontal,
               children: [
                 onBoardingPage(
+                  context,
                   _pageController,
                   title: "ON_BOARDING ${index + 1}",
                   subtitle: "ObBoarding Subtitle ${index + 1}",
                 ),
                 onBoardingPage(
+                  context,
                   _pageController,
                   title: "ON_BOARDING ${index + 1}",
                   subtitle: "ObBoarding Subtitle ${index + 1}",
                 ),
                 onBoardingPage(
+                  context,
                   _pageController,
                   title: "ON_BOARDING ${index + 1}",
                   subtitle: "ObBoarding Subtitle ${index + 1}",
@@ -56,7 +57,6 @@ class OnBoarding extends ConsumerWidget {
                   activeShape: RoundedRectangleBorder(
                     borderRadius: BorderRadiusGeometry.circular(5),
                   ),
-                  activeColor: Colours.lightThemeSecondaryColour,
                 ),
               ),
             ),

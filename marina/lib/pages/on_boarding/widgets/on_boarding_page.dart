@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:marina/common/utils/colours.dart';
 
 Widget onBoardingPage(
+  BuildContext context,
   PageController pageController, {
   String imgPath = "assets/images/logo.png",
   String title = "",
@@ -12,33 +12,29 @@ Widget onBoardingPage(
       Image.asset(imgPath, fit: BoxFit.fitWidth),
       Text(title, style: TextStyle(fontSize: 24)),
       Text(subtitle, style: TextStyle(fontSize: 16)),
-      _nextButton(pageController),
+      SizedBox(height: 24),
+      _nextButton(context, pageController),
     ],
   );
 }
 
-Widget _nextButton(PageController controller) {
-  return GestureDetector(
-    onTap: () {
-      if (controller.page!.toInt() < 3) {
+Widget _nextButton(BuildContext context, PageController controller) {
+  return ElevatedButton(
+    onPressed: () {
+      if (controller.page!.toInt() < 2) {
         controller.animateToPage(
           controller.page!.toInt() + 1,
           duration: Duration(milliseconds: 300),
           curve: Curves.linear,
         );
+      } else {
+        Navigator.pushNamed(context, '/signIn');
       }
     },
-    child: Container(
+    child: SizedBox(
       width: 325,
       height: 50,
-      margin: EdgeInsets.only(top: 100),
-      decoration: BoxDecoration(
-        color: Colours.lightThemePrimaryColour,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Center(
-        child: Text('Continuar', style: TextStyle(color: Colors.white)),
-      ),
+      child: Center(child: Text('Continuar')),
     ),
   );
 }

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:marina/common/utils/theme.dart';
 import 'package:marina/pages/on_boarding/on_boarding.dart';
+import 'package:marina/pages/sign_in/sign_in.dart';
+import 'package:marina/pages/sign_up/sign_up.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
@@ -14,25 +17,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: OnBoarding(),
+      theme: MAppTheme.lightThemeData,
+      routes: {
+        '/': (context) => OnBoarding(),
+        '/signIn': (context) => SignIn(),
+        '/signUp': (context) => SignUp(),
+      },
+      // home: OnBoarding(),
     );
   }
 }
@@ -106,21 +97,17 @@ class MyHomePage extends ConsumerWidget {
         children: [
           FloatingActionButton(
             heroTag: "one",
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (BuildContext context) => SecondPage(),
-                ),
-              );
-            },
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (BuildContext context) => SecondPage(),
+              ),
+            ),
             tooltip: 'Increment',
             child: const Icon(Icons.arrow_right_rounded),
           ),
           FloatingActionButton(
             heroTag: "two",
-            onPressed: () {
-              ref.read(appCount.notifier).state++;
-            },
+            onPressed: () => ref.read(appCount.notifier).state++,
             tooltip: 'Increment',
             child: const Icon(Icons.add),
           ),
