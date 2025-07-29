@@ -2,9 +2,8 @@ import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:marina/common/utils/colours.dart';
+import 'package:marina/pages/notifier/on_boarding_notifier.dart';
 import 'package:marina/pages/on_boarding/widgets/on_boarding_page.dart';
-
-final indexProvider = StateProvider<int>((ref) => 0);
 
 class OnBoarding extends ConsumerWidget {
   OnBoarding({super.key});
@@ -13,7 +12,7 @@ class OnBoarding extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final index = ref.watch(indexProvider);
+    final index = ref.watch(indexDotProvider);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -23,25 +22,25 @@ class OnBoarding extends ConsumerWidget {
           children: [
             PageView(
               onPageChanged: (value) {
-                ref.read(indexProvider.notifier).state = value;
+                ref.read(indexDotProvider.notifier).changeIndex(value);
               },
               controller: _pageController,
               scrollDirection: Axis.horizontal,
               children: [
                 onBoardingPage(
                   _pageController,
-                  title: "ON_BOARDING 1",
-                  subtitle: "ObBoarding Subtitle 1",
+                  title: "ON_BOARDING ${index + 1}",
+                  subtitle: "ObBoarding Subtitle ${index + 1}",
                 ),
                 onBoardingPage(
                   _pageController,
-                  title: "ON_BOARDING 2",
-                  subtitle: "ObBoarding Subtitle 2",
+                  title: "ON_BOARDING ${index + 1}",
+                  subtitle: "ObBoarding Subtitle ${index + 1}",
                 ),
                 onBoardingPage(
                   _pageController,
-                  title: "ON_BOARDING 3",
-                  subtitle: "ObBoarding Subtitle 3",
+                  title: "ON_BOARDING ${index + 1}",
+                  subtitle: "ObBoarding Subtitle ${index + 1}",
                 ),
               ],
             ),
