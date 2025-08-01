@@ -57,7 +57,7 @@ mongoose
     console.error(error);
   });
 
-app.listen(port, hostname, () => {
+app.listen(port, "0.0.0.0", () => {
   console.log(`Server running at http://${hostname}:${port}`);
 });
 

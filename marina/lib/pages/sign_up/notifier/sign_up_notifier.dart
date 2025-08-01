@@ -1,13 +1,13 @@
-import 'package:marina/pages/sign_up/notifier/register_state.dart';
+import 'package:marina/pages/sign_up/notifier/sign_up_state.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'register_notifier.g.dart';
+part 'sign_up_notifier.g.dart';
 
 @riverpod
-class RegisterNotifier extends _$RegisterNotifier {
+class SignUpNotifier extends _$SignUpNotifier {
   @override
-  RegisterState build() {
-    return RegisterState();
+  SignUpState build() {
+    return SignUpState();
   }
 
   void onEmailChange(String email) {
@@ -22,8 +22,8 @@ class RegisterNotifier extends _$RegisterNotifier {
     state = state.copyWith(rePassword: rePassword);
   }
 
-  void onUsernameChange(String username) {
-    state = state.copyWith(username: username);
+  void onNameChange(String name) {
+    state = state.copyWith(name: name);
   }
 
   void onGenderChange(String gender) {

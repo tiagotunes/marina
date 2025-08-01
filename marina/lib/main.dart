@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:marina/common/utils/theme.dart';
+import 'package:marina/global.dart';
 import 'package:marina/pages/on_boarding/on_boarding.dart';
 import 'package:marina/pages/sign_in/sign_in.dart';
 import 'package:marina/pages/sign_up/sign_up.dart';
 
-void main() {
+Future<void> main() async {
+  Global.init();
   runApp(const ProviderScope(child: MyApp()));
 }
 
