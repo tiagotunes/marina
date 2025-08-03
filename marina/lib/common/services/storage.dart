@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:marina/common/models/user.dart';
 import 'package:marina/common/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -13,6 +16,10 @@ class StorageService {
     return await _pref.setString(key, value);
   }
 
+  String getString(String key) {
+    return _pref.getString(key) ?? "";
+  }
+
   Future<bool> setBool(String key, bool value) async {
     return await _pref.setBool(key, value);
   }
@@ -22,6 +29,16 @@ class StorageService {
   }
 
   bool isLoggedIn() {
-    return _pref.getString(Constants.STORAGE_USER_ID) != null ? true : false;
+    return _pref.getString(Constants.STORAGE_USER_PROFILE) != null
+        ? true
+        : false;
+  }
+
+  UserProfile getUserProfile() {
+    var profile = _pref.getString(Constants.STORAGE_USER_PROFILE) ?? "";
+    var profileJson = jsonDecode(profile);
+    var userProfile = UserProfile.fromJson(profileJson);
+
+    return userProfile;
   }
 }

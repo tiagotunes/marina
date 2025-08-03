@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:marina/common/utils/colours.dart';
-import 'package:marina/features/home/provider/bottom_nav_bar_notifier.dart';
-import 'package:marina/features/home/view/widgets/bottom_nav_bar_items.dart';
+import 'package:marina/features/application/provider/bottom_nav_bar_notifier.dart';
+import 'package:marina/features/application/view/widgets/bottom_nav_bar_items.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
 Widget bottomNavBar(WidgetRef ref) {

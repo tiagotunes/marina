@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:marina/common/global_loader/global_loader.dart';
-import 'package:marina/common/models/user_model.dart';
+import 'package:marina/common/models/user.dart';
 import 'package:marina/common/utils/constants.dart';
 import 'package:marina/common/utils/typedefs.dart';
 import 'package:marina/common/widgets/popup_messages.dart';
@@ -53,7 +53,7 @@ class SignInController {
       } else {
         toastInfo("Successful sign in");
 
-        final user = UserModel.fromMap(payload);
+        final user = UserProfile.fromJson(payload);
         asyncPostAllData(user);
       }
     } catch (e) {
@@ -65,15 +65,20 @@ class SignInController {
     ref.read(globalLoaderProvider.notifier).setLoaderValue(false);
   }
 
-  void asyncPostAllData(UserModel user) {
+  void asyncPostAllData(UserProfile user) {
     try {
       Global.storageService.setString(
         Constants.STORAGE_USER_SESSION_TOKEN,
-        "123",
+        "123456789",
       );
-      Global.storageService.setString(Constants.STORAGE_USER_ID, "123456");
-
-      navKey.currentState?.pushNamedAndRemoveUntil('/home', (route) => false);
+      Global.storageService.setString(
+        Constants.STORAGE_USER_PROFILE,
+        jsonEncode({'name': 'T01', 'email': 't01@marina.com'}),
+      );
+      navKey.currentState?.pushNamedAndRemoveUntil(
+        '/application',
+        (route) => false,
+      );
     } catch (e) {
       if (kDebugMode) {
         print(e.toString());

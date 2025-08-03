@@ -1,8 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:marina/common/routes/routes_names.dart';
-import 'package:marina/global.dart';
+import 'package:marina/features/application/view/application.dart';
 import 'package:marina/features/home/view/home.dart';
+import 'package:marina/global.dart';
 import 'package:marina/features/on_boarding/view/on_boarding.dart';
 import 'package:marina/features/sign_in/view/sign_in.dart';
 import 'package:marina/features/sign_up/view/sign_up.dart';
@@ -13,6 +14,7 @@ class Routes {
       RouteEntity(path: RoutesNames.ON_BOARDING, page: OnBoarding()),
       RouteEntity(path: RoutesNames.SIGN_IN, page: SignIn()),
       RouteEntity(path: RoutesNames.SIGN_UP, page: SignUp()),
+      RouteEntity(path: RoutesNames.APPLICATION, page: Application()),
       RouteEntity(path: RoutesNames.HOME, page: Home()),
     ];
   }
@@ -33,7 +35,7 @@ class Routes {
 
           if (isLoggedIn) {
             return MaterialPageRoute(
-              builder: (_) => Home(),
+              builder: (_) => Application(),
               settings: settings,
             );
           } else {
