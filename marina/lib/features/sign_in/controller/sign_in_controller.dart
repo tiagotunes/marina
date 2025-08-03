@@ -3,23 +3,23 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart' as http;
 import 'package:marina/common/global_loader/global_loader.dart';
+import 'package:marina/common/models/user_model.dart';
 import 'package:marina/common/utils/constants.dart';
+import 'package:marina/common/utils/typedefs.dart';
 import 'package:marina/common/widgets/popup_messages.dart';
+import 'package:marina/features/sign_in/repo/sign_in_repo.dart';
 import 'package:marina/global.dart';
-import 'package:marina/pages/sign_in/notifier/sign_in_notifier.dart';
-import 'package:marina/common/entities/user.dart';
+import 'package:marina/features/sign_in/provider/sign_in_notifier.dart';
+import 'package:marina/main.dart';
 
 class SignInController {
-  WidgetRef ref;
-
-  SignInController(this.ref);
+  SignInController();
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
-  void handleSignIn() async {
+  void handleSignIn(WidgetRef ref) async {
     var state = ref.read(signInNotifierProvider);
 
     String email = state.email;
@@ -39,45 +39,45 @@ class SignInController {
     }
 
     ref.read(globalLoaderProvider.notifier).setLoaderValue(true);
-    // var context = Navigator.of(ref.context);
 
     try {
-      LoginRequestEntity loginRequestEntity = LoginRequestEntity();
+      final response = await SignInRepo.signIn(email, password);
+      if (kDebugMode) {
+        print("${response.statusCode} - ${response.body}");
+      }
 
-      // asyncPostAllData(loginRequestEntity);
+      final payload = jsonDecode(response.body) as DataMap;
 
-      final response = await http.post(
-        Uri.parse('http://10.0.2.2:3000/api/v1/login'),
-        headers: {
-          'Content-Type':
-              'application/json', // 'application/x-www-form-urlencoded' or whatever you need
-        },
-        body: jsonEncode({"email": email, "password": password}),
-      );
+      if (response.statusCode != 200) {
+        toastInfo("Error sign in");
+      } else {
+        toastInfo("Successful sign in");
 
-      toastInfo("Successful sign in ");
-      print("${response.statusCode} - ${response.body}");
+        final user = UserModel.fromMap(payload);
+        asyncPostAllData(user);
+      }
     } catch (e) {
       if (kDebugMode) {
         print(e.toString());
       }
     }
+
     ref.read(globalLoaderProvider.notifier).setLoaderValue(false);
   }
-}
 
-void asyncPostAllData(LoginRequestEntity loginRequestEntity) {
-  // Talk to server
+  void asyncPostAllData(UserModel user) {
+    try {
+      Global.storageService.setString(
+        Constants.STORAGE_USER_SESSION_TOKEN,
+        "123",
+      );
+      Global.storageService.setString(Constants.STORAGE_USER_ID, "123456");
 
-  // Have local storage
-  try {
-    Global.storageService.setString(Constants.STORAGE_USER_PROFILE_KEY, "123");
-    Global.storageService.setString(Constants.STORAGE_USER_TOKEN_KEY, "123456");
-  } catch (e) {
-    if (kDebugMode) {
-      print(e.toString());
+      navKey.currentState?.pushNamedAndRemoveUntil('/home', (route) => false);
+    } catch (e) {
+      if (kDebugMode) {
+        print(e.toString());
+      }
     }
   }
-
-  // Redirect to new page
 }

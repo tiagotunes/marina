@@ -1,4 +1,4 @@
-import 'package:marina/pages/sign_up/notifier/sign_up_state.dart';
+import 'package:marina/features/sign_up/provider/sign_up_state.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'sign_up_notifier.g.dart';

@@ -1,8 +1,8 @@
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:marina/pages/on_boarding/notifier/on_boarding_notifier.dart';
-import 'package:marina/pages/on_boarding/widgets/on_boarding_page.dart';
+import 'package:marina/features/on_boarding/provider/on_boarding_notifier.dart';
+import 'package:marina/features/on_boarding/view/widgets/on_boarding_page.dart';
 
 class OnBoarding extends ConsumerWidget {
   OnBoarding({super.key});

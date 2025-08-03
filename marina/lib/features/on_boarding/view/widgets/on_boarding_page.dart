@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:marina/common/utils/constants.dart';
+import 'package:marina/common/utils/image_res.dart';
+import 'package:marina/global.dart';
 
 Widget onBoardingPage(
   BuildContext context,
   PageController pageController, {
-  String imgPath = "assets/images/logo.png",
+  String imgPath = ImageRes.logo,
   String title = "",
   String subtitle = "",
 }) {
@@ -28,6 +31,7 @@ Widget _nextButton(BuildContext context, PageController controller) {
           curve: Curves.linear,
         );
       } else {
+        Global.storageService.setBool(Constants.STORAGE_USER_FIRST_TIME, true);
         Navigator.pushNamed(context, '/signIn');
       }
     },

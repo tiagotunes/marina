@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:marina/pages/sign_up/sign_up_controller.dart';
+import 'package:marina/features/sign_up/controller/sign_up_controller.dart';
 
 Widget signUpButton(SignUpController controller) {
   return ElevatedButton(

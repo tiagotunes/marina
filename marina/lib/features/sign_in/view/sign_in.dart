@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:marina/common/global_loader/global_loader.dart';
+import 'package:marina/common/widgets/app_bar.dart';
 import 'package:marina/common/widgets/text_field.dart';
-import 'package:marina/pages/sign_in/notifier/sign_in_notifier.dart';
-import 'package:marina/pages/sign_in/sign_in_controller.dart';
-import 'package:marina/pages/sign_in/widgets/sign_in_app_bar.dart';
-import 'package:marina/pages/sign_in/widgets/sign_in_button.dart';
-import 'package:marina/pages/sign_in/widgets/sign_up_button.dart';
+import 'package:marina/features/sign_in/provider/sign_in_notifier.dart';
+import 'package:marina/features/sign_in/controller/sign_in_controller.dart';
+import 'package:marina/features/sign_in/view/widgets/sign_in_button.dart';
+import 'package:marina/features/sign_in/view/widgets/sign_up_button.dart';
 
 class SignIn extends ConsumerStatefulWidget {
   const SignIn({super.key});
@@ -19,9 +19,9 @@ class _SignInState extends ConsumerState<SignIn> {
   late SignInController _controller;
 
   @override
-  void initState() {
-    _controller = SignInController(ref);
-    super.initState();
+  void didChangeDependencies() {
+    _controller = SignInController();
+    super.didChangeDependencies();
   }
 
   @override
@@ -30,7 +30,7 @@ class _SignInState extends ConsumerState<SignIn> {
     final loader = ref.watch(globalLoaderProvider);
 
     return Scaffold(
-      appBar: signInAppBar(),
+      appBar: marinaAppBar(title: 'Iniciar Sessão'),
       body: !loader
           ? SingleChildScrollView(
               child: Padding(
@@ -59,7 +59,7 @@ class _SignInState extends ConsumerState<SignIn> {
                     SizedBox(height: 8),
                     Text("Esqueceu a palavra-passe?"),
                     SizedBox(height: 64),
-                    signInButton(_controller),
+                    signInButton(_controller, ref),
                     SizedBox(height: 24),
                     signUpButton(context),
                   ],

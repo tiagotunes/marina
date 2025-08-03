@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:marina/common/global_loader/global_loader.dart';
+import 'package:marina/common/widgets/app_bar.dart';
 import 'package:marina/common/widgets/text_field.dart';
-import 'package:marina/pages/sign_up/notifier/sign_up_notifier.dart';
-import 'package:marina/pages/sign_up/sign_up_controller.dart';
-import 'package:marina/pages/sign_up/widgets/sign_up_button.dart';
-import 'package:marina/pages/sign_up/widgets/sign_up_app_bar.dart';
+import 'package:marina/features/sign_up/provider/sign_up_notifier.dart';
+import 'package:marina/features/sign_up/controller/sign_up_controller.dart';
+import 'package:marina/features/sign_up/view/widgets/sign_up_button.dart';
 
 class SignUp extends ConsumerStatefulWidget {
   const SignUp({super.key});
@@ -29,7 +29,7 @@ class _SignUpState extends ConsumerState<SignUp> {
     final loader = ref.watch(globalLoaderProvider);
 
     return Scaffold(
-      appBar: signUpAppBar(),
+      appBar: marinaAppBar(title: "Registar"),
       body: !loader
           ? SingleChildScrollView(
               child: Padding(
