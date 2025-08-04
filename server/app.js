@@ -42,9 +42,13 @@ app.use(`${api}/tasks`, tasksRouter);
 app.use(`${api}/users`, usersRouter);
 app.use("/public", express.static(__dirname + "/public"));
 
+app.get("/", (req, res) => {
+  res.send("API está ativa");
+});
+
 // Start the server
-const hostname = env.HOST;
-const port = env.PORT;
+const hostname = env.HOST || "0.0.0.0";
+const port = env.PORT || 3000;
 
 require("./helpers/cron_job");
 
@@ -57,7 +61,7 @@ mongoose
     console.error(error);
   });
 
-app.listen(port, "0.0.0.0", () => {
+app.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}`);
 });
 
