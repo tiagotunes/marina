@@ -37,7 +37,7 @@ async function authorizePostRequest(req, res, next) {
     const id = urlParts[usersIndex + 1];
 
     if (!mongoose.isValidObjectId(id)) return next();
-    if (tokenData.id !== id) return res.staus(401).json({ message });
+    if (tokenData.id !== id) return res.status(401).json({ message });
   }
   return next();
 }

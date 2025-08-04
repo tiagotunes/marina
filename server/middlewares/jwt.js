@@ -9,13 +9,12 @@ function authJwt() {
     isRevoked: isRevoked,
   }).unless({
     path: [
-      `${API}/`,
       `${API}/login`,
       `${API}/login/`,
       `${API}/register`,
       `${API}/register/`,
       `${API}/forgot-password`,
-      `${API}/forgor-password/`,
+      `${API}/forgot-password/`,
       `${API}/verify-otp`,
       `${API}/verify-otp/`,
       `${API}/reset-password`,

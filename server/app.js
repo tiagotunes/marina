@@ -24,6 +24,11 @@ app.use(bodyParser.json());
 app.use(morgan("tiny"));
 app.use(cors());
 app.options("*", cors());
+
+app.get("/", (req, res) => {
+  res.send("API está ativa");
+});
+
 app.use(authJwt());
 app.use(authorizePostRequest);
 app.use(errorHandler);
@@ -41,10 +46,6 @@ app.use(`${api}/domains`, domainsRouter);
 app.use(`${api}/tasks`, tasksRouter);
 app.use(`${api}/users`, usersRouter);
 app.use("/public", express.static(__dirname + "/public"));
-
-app.get("/", (req, res) => {
-  res.send("API está ativa");
-});
 
 // Start the server
 const hostname = env.HOST || "0.0.0.0";
