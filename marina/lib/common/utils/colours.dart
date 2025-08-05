@@ -6,6 +6,9 @@ abstract class Colours {
 
   static const Color lightThemePrimaryTextColour = Color(0xFF000401);
 
+  static const Color lightThemeWhiteColour = Color(0xFFFFFFFF);
   static const Color lightThemeGray1Colour = Color(0xFFF5F5F5);
   static const Color lightThemeGray2Colour = Color(0xFFCCCCCC);
+  static const Color lightThemeGray3Colour = Color(0xFF444444);
+  static const Color lightThemeBlackColour = Color(0xFF000000);
 }

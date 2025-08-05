@@ -4,9 +4,13 @@ import 'package:marina/common/widgets/text_field.dart';
 Widget searchBar() {
   return Row(
     children: [
-      Container(
-        width: 300,
-        child: textField(icon: Icons.search_rounded, label: "Pesquisar"),
+      Expanded(
+        // width: 300,
+        child: textField(
+          suffix: Icon(Icons.search_rounded),
+          hint: "Pesquisar",
+          func: (value) {},
+        ),
       ),
     ],
   );

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:marina/common/routes/routes.dart';
-import 'package:marina/common/utils/theme.dart';
+import 'package:marina/common/utils/themes/theme.dart';
 import 'package:marina/global.dart';
 
 Future<void> main() async {

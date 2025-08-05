@@ -10,7 +10,7 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: marinaAppBar(title: "MARINA"),
+      appBar: marinaAppBar(title: Text("MARINA")),
       body: Padding(
         padding: EdgeInsetsGeometry.symmetric(horizontal: 24),
         child: SingleChildScrollView(
@@ -22,7 +22,10 @@ class Home extends StatelessWidget {
                 Global.storageService.getUserProfile().name!,
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
               ),
-              searchBar(),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                child: searchBar(),
+              ),
             ],
           ),
         ),

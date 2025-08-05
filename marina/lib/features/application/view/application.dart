@@ -11,7 +11,7 @@ class Application extends ConsumerWidget {
     return Scaffold(
       body: applcationScreens(ref),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.only(bottom: 30),
         child: bottomNavBar(ref),
       ),
     );

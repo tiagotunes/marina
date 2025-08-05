@@ -13,25 +13,20 @@ Widget bottomNavBar(WidgetRef ref) {
     children: [
       ClipRRect(
         borderRadius: BorderRadius.circular(16),
-        child: Container(
-          decoration: BoxDecoration(color: Colours.lightThemePrimaryColour),
-          child: SalomonBottomBar(
-            currentIndex: index,
-            onTap: (value) {
-              ref
-                  .read(bottomNavBarNotifierProvider.notifier)
-                  .changeIndex(value);
-            },
-            backgroundColor: Colours.lightThemePrimaryColour,
-            selectedItemColor: Colors.white,
-            selectedColorOpacity: 0.25,
-            unselectedItemColor: Colors.white,
-            margin: const EdgeInsets.all(10),
-            itemShape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-            items: bottomNavBarItems,
+        child: SalomonBottomBar(
+          onTap: (value) {
+            ref.read(bottomNavBarNotifierProvider.notifier).changeIndex(value);
+          },
+          backgroundColor: Colours.lightThemePrimaryColour,
+          currentIndex: index,
+          itemShape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
           ),
+          items: bottomNavBarItems,
+          margin: const EdgeInsets.all(10),
+          selectedItemColor: Colors.white,
+          selectedColorOpacity: 0.25,
+          unselectedItemColor: Colors.white,
         ),
       ),
     ],
