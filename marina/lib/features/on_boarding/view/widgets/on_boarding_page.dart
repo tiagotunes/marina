@@ -1,25 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:marina/common/utils/constants.dart';
-import 'package:marina/common/utils/image_res.dart';
 import 'package:marina/common/widgets/primary_button.dart';
 import 'package:marina/global.dart';
 
-Widget onBoardingPage(
-  BuildContext context,
-  PageController pageController, {
-  String imgPath = ImageRes.logo,
-  String title = "",
-  String subtitle = "",
-}) {
-  return Column(
-    children: [
-      Image.asset(imgPath, fit: BoxFit.fitWidth),
-      Text(title, style: TextStyle(fontSize: 24)),
-      Text(subtitle, style: TextStyle(fontSize: 16)),
-      SizedBox(height: 24),
-      _nextButton(context, pageController),
-    ],
-  );
+class OnBoardingPage extends StatelessWidget {
+  final BuildContext context;
+  final PageController pageController;
+  final String imgPath;
+  final String title;
+  final String subtitle;
+
+  const OnBoardingPage({
+    super.key,
+    required this.context,
+    required this.pageController,
+    required this.imgPath,
+    required this.title,
+    required this.subtitle,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Image.asset(imgPath, fit: BoxFit.fitWidth),
+        Text(title, style: TextStyle(fontSize: 24)),
+        Text(subtitle, style: TextStyle(fontSize: 16)),
+        SizedBox(height: 24),
+        _nextButton(context, pageController),
+      ],
+    );
+  }
 }
 
 Widget _nextButton(BuildContext context, PageController controller) {

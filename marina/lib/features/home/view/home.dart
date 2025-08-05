@@ -23,7 +23,7 @@ class Home extends StatelessWidget {
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                padding: const EdgeInsets.symmetric(vertical: 24),
                 child: searchBar(),
               ),
             ],
