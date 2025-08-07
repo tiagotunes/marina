@@ -43,6 +43,7 @@ dependencies:
   shared_preferences: ^2.5.3
   http: ^1.4.0
   salomon_bottom_bar: ^3.3.2
+  dio: ^5.8.0+1
 
 dev_dependencies:
   flutter_test:

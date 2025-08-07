@@ -11,9 +11,8 @@ Widget searchBar({VoidCallback? func}) {
           func: (value) {},
         ),
       ),
-      SizedBox(width: 16),
-      IconButton(onPressed: func ?? () {}, icon: Icon(Icons.tune_rounded)),
-      //
+      // SizedBox(width: 16),
+      // IconButton(onPressed: func ?? () {}, icon: Icon(Icons.tune_rounded)),
     ],
   );
 }
