@@ -1,6 +1,7 @@
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:marina/common/utils/image_res.dart';
 import 'package:marina/features/on_boarding/provider/on_boarding_notifier.dart';
 import 'package:marina/features/on_boarding/view/widgets/on_boarding_page.dart';
 
@@ -25,23 +26,26 @@ class OnBoarding extends ConsumerWidget {
               controller: _pageController,
               scrollDirection: Axis.horizontal,
               children: [
-                onBoardingPage(
-                  context,
-                  _pageController,
+                OnBoardingPage(
+                  context: context,
+                  pageController: _pageController,
                   title: "ON_BOARDING ${index + 1}",
                   subtitle: "ObBoarding Subtitle ${index + 1}",
+                  imgPath: ImageRes.logo,
                 ),
-                onBoardingPage(
-                  context,
-                  _pageController,
+                OnBoardingPage(
+                  context: context,
+                  pageController: _pageController,
                   title: "ON_BOARDING ${index + 1}",
                   subtitle: "ObBoarding Subtitle ${index + 1}",
+                  imgPath: ImageRes.logo,
                 ),
-                onBoardingPage(
-                  context,
-                  _pageController,
+                OnBoardingPage(
+                  context: context,
+                  pageController: _pageController,
                   title: "ON_BOARDING ${index + 1}",
                   subtitle: "ObBoarding Subtitle ${index + 1}",
+                  imgPath: ImageRes.logo,
                 ),
               ],
             ),

@@ -7,9 +7,7 @@ import 'package:marina/features/sign_up/provider/sign_up_notifier.dart';
 import 'package:marina/features/sign_up/repo/sign_up_repo.dart';
 
 class SignUpController {
-  late WidgetRef ref;
-
-  SignUpController({required this.ref});
+  SignUpController();
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -18,7 +16,7 @@ class SignUpController {
   TextEditingController genderController = TextEditingController();
   TextEditingController roleController = TextEditingController();
 
-  void handleSignUp() async {
+  void handleSignUp(WidgetRef ref) async {
     var state = ref.read(signUpNotifierProvider);
 
     String email = state.email;
@@ -67,6 +65,7 @@ class SignUpController {
         ref.read(globalLoaderProvider.notifier).setLoaderValue(false);
       }
     }
+
     ref.read(globalLoaderProvider.notifier).setLoaderValue(false);
   }
 }

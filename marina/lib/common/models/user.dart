@@ -19,10 +19,6 @@ class UserProfile {
   });
 
   factory UserProfile.fromJson(DataMap json) {
-    // if (json['accessToken'] == null) {
-    //   return UserProfile();
-    // }
-
     return UserProfile(
       accessToken: json['accessToken'],
       name: json['name'],

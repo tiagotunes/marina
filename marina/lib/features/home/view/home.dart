@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:marina/common/widgets/app_bar.dart';
 import 'package:marina/common/widgets/search_bar.dart';
+import 'package:marina/features/home/view/widgets/home_menu_bar.dart';
 import 'package:marina/global.dart';
 
 class Home extends StatelessWidget {
@@ -10,19 +11,23 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: marinaAppBar(title: "MARINA"),
+      appBar: marinaAppBar(title: Text("MARINA")),
       body: Padding(
         padding: EdgeInsetsGeometry.symmetric(horizontal: 24),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Hello,", style: TextStyle(fontSize: 18)),
+              Text("Olá,", style: TextStyle(fontSize: 18)),
               Text(
                 Global.storageService.getUserProfile().name!,
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
               ),
-              searchBar(),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 24),
+                child: searchBar(),
+              ),
+              const HomeMenuBar(),
             ],
           ),
         ),

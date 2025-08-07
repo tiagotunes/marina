@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:marina/common/utils/colours.dart';
+import 'package:marina/common/utils/text.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
 // var bottomNavTabs = <BottomNavigationBarItem>[
@@ -32,6 +34,9 @@ SalomonBottomBarItem bottomNavBarItem({
 }) {
   return SalomonBottomBarItem(
     icon: Icon(icon, size: 30),
-    title: Text(title, style: TextStyle(fontFamily: 'Jura')),
+    title: Text(
+      title,
+      style: TextStyles.button.copyWith(color: Colours.lightThemeWhiteColour),
+    ),
   );
 }
