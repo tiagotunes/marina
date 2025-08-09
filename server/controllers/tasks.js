@@ -45,7 +45,7 @@ exports.getUserTaks = async (req, res) => {
 
     const tasks = await Task.find({ userId: user._id })
       .select("docId read dtDeadline status")
-      .populate({ path: docId, select: "title" })
+      .populate({ path: "docId", select: "title" })
       .sort({ dtDeadline: -1 });
     if (!tasks) {
       return res.status(404).json({ message: "Tasks not found" });
