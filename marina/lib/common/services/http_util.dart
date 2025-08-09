@@ -71,9 +71,8 @@ class HttpUtil {
     return headers;
   }
 
-  Future<Response> post(
+  Future<Response> get(
     String path, {
-    Object? data,
     DataMap? queryParameters,
     Options? options,
   }) async {
@@ -85,13 +84,35 @@ class HttpUtil {
       requestOptions.headers!.addAll(authorization);
     }
 
-    var response = await dio.post(
+    return await dio.get(
+      path,
+      queryParameters: queryParameters,
+      options: requestOptions,
+    );
+  }
+
+  Future<Response> post(
+    String path, {
+    Object? data,
+    DataMap? queryParameters,
+    Options? options,
+  }) async {
+    print(dio.options.baseUrl);
+
+    Options requestOptions = options ?? Options();
+    requestOptions.headers = requestOptions.headers ?? {};
+
+    DataMap? authorization = getAuthorizationHeader();
+    if (authorization != null) {
+      requestOptions.headers!.addAll(authorization);
+    }
+
+    return await dio.post(
       path,
       data: data,
       queryParameters: queryParameters,
       options: requestOptions,
     );
-    return response;
   }
 }
 
