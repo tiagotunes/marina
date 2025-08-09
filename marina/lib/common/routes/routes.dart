@@ -45,9 +45,6 @@ class Routes {
             );
           }
         } else {
-          if (kDebugMode) {
-            print('App first run');
-          }
           return MaterialPageRoute(
             builder: (_) => result.first.page,
             settings: settings,

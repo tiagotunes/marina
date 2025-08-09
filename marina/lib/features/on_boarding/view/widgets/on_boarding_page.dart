@@ -21,14 +21,17 @@ class OnBoardingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Image.asset(imgPath, fit: BoxFit.fitWidth),
-        Text(title, style: TextStyle(fontSize: 24)),
-        Text(subtitle, style: TextStyle(fontSize: 16)),
-        SizedBox(height: 24),
-        _nextButton(context, pageController),
-      ],
+    return Padding(
+      padding: const EdgeInsets.all(24.0),
+      child: Column(
+        children: [
+          Image.asset(imgPath, fit: BoxFit.fitWidth),
+          Text(title, style: TextStyle(fontSize: 24)),
+          Text(subtitle, style: TextStyle(fontSize: 16)),
+          SizedBox(height: 24),
+          _nextButton(context, pageController),
+        ],
+      ),
     );
   }
 }

@@ -1,40 +1,44 @@
 import 'package:marina/common/utils/typedefs.dart';
 
 class UserProfile {
-  String? accessToken;
+  String? id;
   String? name;
   String? email;
   String? gender;
   // final List<Domain> domains;
-  bool? admin;
   String? status;
+  bool? admin;
+  String? accessToken;
 
   UserProfile({
-    this.accessToken,
+    this.id,
     this.name,
     this.email,
     this.gender,
-    this.admin,
     this.status,
+    this.admin,
+    this.accessToken,
   });
 
   factory UserProfile.fromJson(DataMap json) {
     return UserProfile(
-      accessToken: json['accessToken'],
+      id: json['_id'],
       name: json['name'],
       email: json['email'],
       gender: json['gender'],
-      admin: json['admin'],
       status: json['status'],
+      admin: json['admin'],
+      accessToken: json['accessToken'],
     );
   }
 
   DataMap toJson() => {
-    "accessToken": accessToken,
+    "_id": id,
     "name": name,
     "email": email,
     "gender": gender,
-    "admin": admin,
     "status": status,
+    "admin": admin,
+    "accessToken": accessToken,
   };
 }
