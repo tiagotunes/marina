@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:marina/common/utils/colours.dart';
-import 'package:marina/common/utils/text.dart';
+import 'package:marina/common/widgets/primary_button.dart';
+import 'package:marina/features/home/view/widgets/home_menu_bar_tag.dart';
 
 class HomeMenuBar extends StatelessWidget {
   const HomeMenuBar({super.key});
@@ -8,37 +8,21 @@ class HomeMenuBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Container(
-          padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-          decoration: BoxDecoration(
-            color: Colours.lightThemePrimaryColour,
-            borderRadius: BorderRadius.circular(30),
-          ),
-          child: Text(
-            "Todos",
-            style: TextStyles.tagline.copyWith(
-              color: Colours.lightThemeWhiteColour,
-            ),
-          ),
+        Row(
+          children: [
+            homeMenuBarTag(text: "Todas", selected: true),
+            SizedBox(width: 8),
+            homeMenuBarTag(text: "Abertas", selected: false),
+            SizedBox(width: 8),
+            homeMenuBarTag(text: "Submetidas", selected: false),
+          ],
         ),
-        Container(
-          margin: EdgeInsets.only(left: 16),
-          padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-          decoration: BoxDecoration(
-            color: Colours.lightThemeGray1Colour,
-            borderRadius: BorderRadius.circular(30),
-          ),
-          child: Text("Abertos", style: TextStyles.tagline),
-        ),
-        Container(
-          margin: EdgeInsets.only(left: 16),
-          padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-          decoration: BoxDecoration(
-            color: Colours.lightThemeGray1Colour,
-            borderRadius: BorderRadius.circular(30),
-          ),
-          child: Text("Fechados", style: TextStyles.tagline),
+        primaryElevatedButton(
+          context: context,
+          func: () {},
+          center: Icon(Icons.add_rounded),
         ),
       ],
     );

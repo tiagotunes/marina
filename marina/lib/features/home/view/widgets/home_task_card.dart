@@ -1,0 +1,41 @@
+import 'package:flutter/material.dart';
+import 'package:marina/common/models/task.dart';
+import 'package:marina/common/utils/colours.dart';
+import 'package:marina/common/utils/text.dart';
+
+Widget homeTaskCard(UserTask task) {
+  return ListTile(
+    title: Text(task.docTitle ?? ""),
+    titleTextStyle: task.read ?? false
+        ? TextStyles.body1
+        : TextStyles.body1.copyWith(color: Colours.lightThemePrimaryColour),
+    trailing: Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Icon(
+          task.status == "submit"
+              ? Icons.file_download_done_rounded
+              : Icons.file_open_rounded,
+        ),
+      ],
+    ),
+    iconColor: task.read ?? false
+        ? Colours.lightThemePrimaryColour
+        : Colours.lightThemeWhiteColour,
+    tileColor: task.status == "submit"
+        ? Colours.lightThemePrimaryColour.withValues(alpha: 0.20)
+        : task.read ?? false
+        ? Colours.lightThemeWhiteColour
+        : Colours.lightThemePrimaryColour,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadiusGeometry.circular(8),
+      side: BorderSide(
+        color: task.read ?? false
+            ? Colours.lightThemePrimaryColour
+            : Colours.lightThemeWhiteColour,
+        width: 2,
+      ),
+    ),
+    contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+  );
+}
