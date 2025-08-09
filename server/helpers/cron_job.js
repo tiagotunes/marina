@@ -16,7 +16,7 @@ function getDate() {
  * cron.schedule("<minute> <hour> <dayOfMonth> <month> <dayOfWeek>", () => ())
  ---------------------------------------------------------------------------------**/
 cron.schedule("0 0 * * *", () => updateDomains());
-cron.schedule("0 8 * * *", () => createTasks());
+cron.schedule("20 15 * * *", () => createTasks());
 
 /**---------------------------------------------------------------------------------
  * * Updates domain status and closes associated documents based on certain conditions.
@@ -81,11 +81,14 @@ async function createTasks(userId = null) {
       MeasureType.find({ status: "active" }),
     ]);
 
-    if (!docs.length || !measureTypes.length) {
+    if (!docs.length) {
       if (!userId)
-        console.log(
-          `[CREATE_TASKS] ${getDate()} No documents or measure types available`
-        );
+        console.log(`[CREATE_TASKS] ${getDate()} No documents available`);
+      return false;
+    }
+    if (!measureTypes.length) {
+      if (!userId)
+        console.log(`[CREATE_TASKS] ${getDate()} No measure types available`);
       return false;
     }
 
