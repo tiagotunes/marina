@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:marina/common/utils/image_res.dart';
 import 'package:marina/common/widgets/app_bar.dart';
-import 'package:marina/common/widgets/text_field.dart';
 import 'package:marina/features/sign_in/provider/sign_in_notifier.dart';
 import 'package:marina/features/sign_in/controller/sign_in_controller.dart';
 import 'package:marina/features/sign_in/view/widgets/sign_in_button.dart';
+import 'package:marina/features/sign_in/view/widgets/sign_in_fields.dart';
 import 'package:marina/features/sign_in/view/widgets/sign_up_button.dart';
 
 class SignIn extends ConsumerStatefulWidget {
@@ -30,6 +30,7 @@ class _SignInState extends ConsumerState<SignIn> {
 
     return Scaffold(
       appBar: marinaAppBar(
+        autoImplyLeading: false,
         title: Row(
           children: [
             Image.asset(
@@ -48,24 +49,7 @@ class _SignInState extends ConsumerState<SignIn> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              textField(
-                controller: _controller.emailController,
-                label: 'Email',
-                prefix: Icon(Icons.email),
-                func: (value) => ref
-                    .read(signInNotifierProvider.notifier)
-                    .onEmailChange(value),
-              ),
-              SizedBox(height: 24),
-              textField(
-                controller: _controller.passwordController,
-                label: 'Palavra-passe',
-                prefix: Icon(Icons.password),
-                func: (value) => ref
-                    .read(signInNotifierProvider.notifier)
-                    .onPasswordChange(value),
-                obscureText: true,
-              ),
+              signInFields(_controller, ref),
               SizedBox(height: 8),
               Text("Esqueceu a palavra-passe?"),
               SizedBox(height: 64),

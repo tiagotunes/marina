@@ -6,6 +6,6 @@ toastInfo(String msg, {Color backgroundColor = Colors.blue}) {
     backgroundColor: backgroundColor,
     gravity: ToastGravity.TOP,
     msg: msg,
-    toastLength: Toast.LENGTH_SHORT,
+    toastLength: Toast.LENGTH_LONG,
   );
 }

@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:marina/common/widgets/app_bar.dart';
 import 'package:marina/common/widgets/search_bar.dart';
 import 'package:marina/features/home/view/widgets/home_menu_bar.dart';
-import 'package:marina/global.dart';
 
-class Home extends StatelessWidget {
+class Home extends ConsumerStatefulWidget {
   const Home({super.key});
 
+  @override
+  ConsumerState<Home> createState() => _HomeState();
+}
+
+class _HomeState extends ConsumerState<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,11 +23,6 @@ class Home extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Olá,", style: TextStyle(fontSize: 18)),
-              Text(
-                Global.storageService.getUserProfile().name!,
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
-              ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 24),
                 child: searchBar(),
