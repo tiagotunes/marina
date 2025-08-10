@@ -10,7 +10,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'user_task_notifier.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class UserTasksNotifier extends _$UserTasksNotifier {
   @override
   FutureOr<List<UserTask>> build(String userId) async {
@@ -22,7 +22,7 @@ class UserTasksNotifier extends _$UserTasksNotifier {
       // Display the message set in the interceptor
       toastInfo(e.error.toString());
       if (kDebugMode) {
-        print("Sign in failed: ${e.error}");
+        print("User Task failed: ${e.error}");
       }
       return [];
     } catch (e) {
@@ -54,7 +54,7 @@ class UserTasksNotifier extends _$UserTasksNotifier {
       // Display the message set in the interceptor
       toastInfo(e.error.toString());
       if (kDebugMode) {
-        print("Sign in failed: ${e.error}");
+        print("user Task failed: ${e.error}");
       }
     } catch (e) {
       toastInfo("Unexpected error");

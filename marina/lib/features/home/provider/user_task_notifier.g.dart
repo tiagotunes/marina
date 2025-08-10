@@ -6,7 +6,7 @@ part of 'user_task_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$userTasksNotifierHash() => r'46c8c6f91e3344b580183c55aa0c11d993632efe';
+String _$userTasksNotifierHash() => r'64fa6d7ea49a2ccdf7cbdbe53bf85d6916f593cd';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -30,7 +30,7 @@ class _SystemHash {
 }
 
 abstract class _$UserTasksNotifier
-    extends BuildlessAutoDisposeAsyncNotifier<List<UserTask>> {
+    extends BuildlessAsyncNotifier<List<UserTask>> {
   late final String userId;
 
   FutureOr<List<UserTask>> build(String userId);
@@ -74,11 +74,7 @@ class UserTasksNotifierFamily extends Family<AsyncValue<List<UserTask>>> {
 
 /// See also [UserTasksNotifier].
 class UserTasksNotifierProvider
-    extends
-        AutoDisposeAsyncNotifierProviderImpl<
-          UserTasksNotifier,
-          List<UserTask>
-        > {
+    extends AsyncNotifierProviderImpl<UserTasksNotifier, List<UserTask>> {
   /// See also [UserTasksNotifier].
   UserTasksNotifierProvider(String userId)
     : this._internal(
@@ -130,7 +126,7 @@ class UserTasksNotifierProvider
   }
 
   @override
-  AutoDisposeAsyncNotifierProviderElement<UserTasksNotifier, List<UserTask>>
+  AsyncNotifierProviderElement<UserTasksNotifier, List<UserTask>>
   createElement() {
     return _UserTasksNotifierProviderElement(this);
   }
@@ -151,18 +147,13 @@ class UserTasksNotifierProvider
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin UserTasksNotifierRef
-    on AutoDisposeAsyncNotifierProviderRef<List<UserTask>> {
+mixin UserTasksNotifierRef on AsyncNotifierProviderRef<List<UserTask>> {
   /// The parameter `userId` of this provider.
   String get userId;
 }
 
 class _UserTasksNotifierProviderElement
-    extends
-        AutoDisposeAsyncNotifierProviderElement<
-          UserTasksNotifier,
-          List<UserTask>
-        >
+    extends AsyncNotifierProviderElement<UserTasksNotifier, List<UserTask>>
     with UserTasksNotifierRef {
   _UserTasksNotifierProviderElement(super.provider);
 

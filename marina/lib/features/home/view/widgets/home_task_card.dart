@@ -7,7 +7,8 @@ import 'package:marina/main.dart';
 
 Widget homeTaskCard(UserTask task) {
   return ListTile(
-    onTap: () => navKey.currentState?.pushNamed(RoutesNames.TASK),
+    onTap: () =>
+        navKey.currentState?.pushNamed(RoutesNames.TASK, arguments: task.id),
     title: Text(task.docTitle ?? ""),
     titleTextStyle: task.read ?? false
         ? TextStyles.body1

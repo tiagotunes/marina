@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:marina/common/utils/colours.dart';
+import 'package:marina/common/utils/text.dart';
 
 class TaskPage1 extends StatefulWidget {
-  const TaskPage1({super.key});
+  final String title;
+  final String text;
+  const TaskPage1({super.key, required this.title, required this.text});
 
   @override
   State<TaskPage1> createState() => _TaskPage1State();
@@ -13,7 +16,17 @@ class _TaskPage1State extends State<TaskPage1> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(12.0),
-      child: Container(decoration: taskPageDecoration()),
+      child: Container(
+        decoration: taskPageDecoration(),
+        padding: EdgeInsets.all(16),
+        child: Column(
+          children: [
+            Text(widget.title, style: TextStyles.heading3),
+            SizedBox(height: 16),
+            Text(widget.text, style: TextStyles.body1),
+          ],
+        ),
+      ),
     );
   }
 }

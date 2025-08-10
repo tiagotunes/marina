@@ -1,12 +1,59 @@
+import 'package:marina/common/models/document.dart';
+import 'package:marina/common/models/measure.dart';
 import 'package:marina/common/utils/typedefs.dart';
 
-class Task {
+class TaskModel {
   String? id;
-  String? docId;
+  Document? docId;
+  String? userId;
   bool? read;
   DateTime? dtDeadline;
+  int? score;
+  List<Measure>? measures;
   String? status;
-  String? comment;
+  DateTime? dtCr;
+  int? v;
+
+  TaskModel({
+    this.id,
+    this.docId,
+    this.userId,
+    this.read,
+    this.dtDeadline,
+    this.score,
+    this.measures,
+    this.status,
+    this.dtCr,
+    this.v,
+  });
+
+  factory TaskModel.fromJson(Map<String, dynamic> json) => TaskModel(
+    id: json["_id"],
+    docId: Document.fromJson(json["docId"]),
+    userId: json["userId"],
+    read: json["read"],
+    dtDeadline: DateTime.parse(json["dtDeadline"]),
+    score: json["score"],
+    measures: List<Measure>.from(
+      json["measures"].map((x) => Measure.fromJson(x)),
+    ),
+    status: json["status"],
+    dtCr: DateTime.parse(json["dtCr"]),
+    v: json["__v"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "_id": id,
+    "docId": docId!.toJson(),
+    "userId": userId,
+    "read": read,
+    "dtDeadline": dtDeadline!.toIso8601String(),
+    "score": score,
+    "measures": List<dynamic>.from(measures!.map((x) => x.toJson())),
+    "status": status,
+    "dtCr": dtCr!.toIso8601String(),
+    "__v": v,
+  };
 }
 
 class UserTask {

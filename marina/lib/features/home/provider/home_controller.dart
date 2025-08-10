@@ -4,7 +4,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'home_controller.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class HomeUserProfile extends _$HomeUserProfile {
   @override
   FutureOr<UserProfile> build() {
