@@ -15,7 +15,7 @@ function getDate() {
  * * Setting up cron job schedules.
  * cron.schedule("<minute> <hour> <dayOfMonth> <month> <dayOfWeek>", () => ())
  ---------------------------------------------------------------------------------**/
-cron.schedule("0 0 * * *", () => updateDomains());
+cron.schedule("32 16 * * *", () => updateDomains());
 cron.schedule("20 15 * * *", () => createTasks());
 
 /**---------------------------------------------------------------------------------
@@ -25,8 +25,8 @@ async function updateDomains() {
   try {
     console.log(`[UPDATE_DOMAINS] ${getDate()} Running`);
 
-    let domainsToBeUpdated = await Domain.find({
-      status: { $ne: "$plannedStatus" },
+    const domainsToBeUpdated = await Domain.find({
+      $expr: { $ne: ["$status", "$plannedStatus"] },
     });
 
     if (domainsToBeUpdated.length !== 0) {
@@ -49,12 +49,13 @@ async function updateDomains() {
           { domainId: { $in: inactiveDomainIds } },
           { status: "close" }
         );
+
+        console.log(
+          `[UPDATE_DOMAINS] ${getDate()} Closed ${
+            updateResult.modifiedCount
+          } documents`
+        );
       }
-      console.log(
-        `[UPDATE_DOMAINS] ${getDate()} Closed ${
-          updateResult.modifiedCount
-        } documents`
-      );
     }
 
     console.log(
