@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 
 PreferredSizeWidget marinaAppBar({
   List<Widget>? actions,
-  bool? autoImplyLeading,
-  Widget title = const Text('<title>'),
+  bool autoImplyLeading = true,
+  Widget title = const Text(''),
 }) {
   return AppBar(
     actions: actions,
-    automaticallyImplyLeading: autoImplyLeading ?? true,
+    actionsPadding: EdgeInsets.only(right: 16),
+    automaticallyImplyLeading: autoImplyLeading,
     title: title,
   );
 }

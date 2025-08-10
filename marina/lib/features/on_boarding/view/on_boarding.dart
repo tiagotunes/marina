@@ -1,7 +1,7 @@
-import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:marina/common/utils/image_res.dart';
+import 'package:marina/common/widgets/dots_indicator.dart';
 import 'package:marina/features/on_boarding/provider/on_boarding_notifier.dart';
 import 'package:marina/features/on_boarding/view/widgets/on_boarding_page.dart';
 
@@ -51,18 +51,7 @@ class OnBoarding extends ConsumerWidget {
             ),
             Positioned(
               bottom: 50,
-              child: DotsIndicator(
-                position: index.toDouble(),
-                dotsCount: 3,
-                mainAxisAlignment: MainAxisAlignment.center,
-                decorator: DotsDecorator(
-                  size: const Size.square(9.0),
-                  activeSize: const Size(24, 8),
-                  activeShape: RoundedRectangleBorder(
-                    borderRadius: BorderRadiusGeometry.circular(5),
-                  ),
-                ),
-              ),
+              child: marinaDotsIndicator(index.toDouble(), 3),
             ),
           ],
         ),

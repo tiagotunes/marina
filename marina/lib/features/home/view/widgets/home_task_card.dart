@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:marina/common/models/task.dart';
+import 'package:marina/common/routes/routes_names.dart';
 import 'package:marina/common/utils/colours.dart';
 import 'package:marina/common/utils/text.dart';
+import 'package:marina/main.dart';
 
 Widget homeTaskCard(UserTask task) {
   return ListTile(
+    onTap: () => navKey.currentState?.pushNamed(RoutesNames.TASK),
     title: Text(task.docTitle ?? ""),
     titleTextStyle: task.read ?? false
         ? TextStyles.body1

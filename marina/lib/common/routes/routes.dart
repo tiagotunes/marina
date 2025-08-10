@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:marina/common/routes/routes_names.dart';
 import 'package:marina/features/application/view/application.dart';
 import 'package:marina/features/home/view/home.dart';
+import 'package:marina/features/task/view/task.dart';
 import 'package:marina/global.dart';
 import 'package:marina/features/on_boarding/view/on_boarding.dart';
 import 'package:marina/features/sign_in/view/sign_in.dart';
@@ -17,6 +18,7 @@ class Routes {
       RouteEntity(path: RoutesNames.SIGN_UP, page: SignUp()),
       RouteEntity(path: RoutesNames.APPLICATION, page: Application()),
       RouteEntity(path: RoutesNames.HOME, page: Home()),
+      RouteEntity(path: RoutesNames.TASK, page: Task()),
     ];
   }
 
