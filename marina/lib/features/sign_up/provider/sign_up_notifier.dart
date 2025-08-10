@@ -26,11 +26,11 @@ class SignUpNotifier extends _$SignUpNotifier {
     state = state.copyWith(name: name);
   }
 
-  void onGenderChange(String gender) {
-    state = state.copyWith(gender: gender);
-  }
+  // void onGenderChange(String gender) {
+  //   state = state.copyWith(gender: gender);
+  // }
 
-  void onRoleChange(String role) {
-    state = state.copyWith(role: role);
-  }
+  // void onRoleChange(String role) {
+  //   state = state.copyWith(role: role);
+  // }
 }

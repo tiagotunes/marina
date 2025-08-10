@@ -8,7 +8,7 @@ Widget homeTaskCard(UserTask task) {
     title: Text(task.docTitle ?? ""),
     titleTextStyle: task.read ?? false
         ? TextStyles.body1
-        : TextStyles.body1.copyWith(color: Colours.lightThemePrimaryColour),
+        : TextStyles.body1.copyWith(color: Colours.lightThemeWhiteColour),
     trailing: Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
@@ -29,12 +29,7 @@ Widget homeTaskCard(UserTask task) {
         : Colours.lightThemePrimaryColour,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadiusGeometry.circular(8),
-      side: BorderSide(
-        color: task.read ?? false
-            ? Colours.lightThemePrimaryColour
-            : Colours.lightThemeWhiteColour,
-        width: 2,
-      ),
+      side: BorderSide(color: Colours.lightThemePrimaryColour, width: 2),
     ),
     contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
   );

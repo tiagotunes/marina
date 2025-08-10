@@ -20,12 +20,8 @@ class _HomeState extends ConsumerState<Home> {
   void initState() {
     super.initState();
 
-    // Fetch tasks after user profile is loaded
     Future.microtask(() async {
-      final userProfileAsync = await ref.read(homeUserProfileProvider.future);
-      ref
-          .read(userTasksNotifierProvider(userProfileAsync.id!).notifier)
-          .refresh();
+      final _ = await ref.read(homeUserProfileProvider.future);
     });
   }
 
@@ -51,18 +47,18 @@ class _HomeState extends ConsumerState<Home> {
                   const SizedBox(height: 24),
                   searchBar(),
                   const SizedBox(height: 24),
-                  const HomeMenuBar(),
+                  homeMenuBar(context, ref),
                   const SizedBox(height: 24),
-
-                  // You can add tasks list UI here using tasksAsync
                   tasksAsync.when(
                     data: (tasks) {
                       if (tasks.isEmpty) {
                         return const Text("Sem tarefas");
                       }
-                      return ListView.builder(
+                      return ListView.separated(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
+                        separatorBuilder: (context, index) =>
+                            const SizedBox(height: 12),
                         itemCount: tasks.length,
                         itemBuilder: (context, index) {
                           final task = tasks[index];

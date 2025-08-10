@@ -97,8 +97,6 @@ class HttpUtil {
     DataMap? queryParameters,
     Options? options,
   }) async {
-    print(dio.options.baseUrl);
-
     Options requestOptions = options ?? Options();
     requestOptions.headers = requestOptions.headers ?? {};
 
