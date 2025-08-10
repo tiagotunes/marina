@@ -67,7 +67,6 @@ class HttpUtil {
     if (acessToken.isNotEmpty) {
       headers['Authorization'] = 'Bearer $acessToken';
     }
-
     return headers;
   }
 
@@ -111,6 +110,20 @@ class HttpUtil {
       queryParameters: queryParameters,
       options: requestOptions,
     );
+  }
+
+  Future<bool> isTokenValid() async {
+    try {
+      final res = await get('/verify-token');
+      if (res.data) {
+        return true;
+      } else {
+        await Global.storageService.removeUserPrefs();
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
   }
 }
 

@@ -45,4 +45,9 @@ class StorageService {
 
     return userProfile;
   }
+
+  Future<bool> removeUserPrefs() async {
+    return await _pref.remove(Constants.STORAGE_USER_SESSION_TOKEN) &&
+        await _pref.remove(Constants.STORAGE_USER_PROFILE);
+  }
 }

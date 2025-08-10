@@ -7,6 +7,7 @@ import 'package:marina/global.dart';
 import 'package:marina/features/on_boarding/view/on_boarding.dart';
 import 'package:marina/features/sign_in/view/sign_in.dart';
 import 'package:marina/features/sign_up/view/sign_up.dart';
+import 'package:marina/token_check.dart';
 
 class Routes {
   static List<RouteEntity> routes() {
@@ -31,19 +32,10 @@ class Routes {
         bool appFirstTime = Global.storageService.getAppFirstTime();
 
         if (result.first.path == RoutesNames.ON_BOARDING && appFirstTime) {
-          bool isLoggedIn = Global.storageService.isLoggedIn();
-
-          if (isLoggedIn) {
-            return MaterialPageRoute(
-              builder: (_) => Application(),
-              settings: settings,
-            );
-          } else {
-            return MaterialPageRoute(
-              builder: (_) => SignIn(),
-              settings: settings,
-            );
-          }
+          return MaterialPageRoute(
+            builder: (_) => const TokenCheck(),
+            settings: settings,
+          );
         } else {
           return MaterialPageRoute(
             builder: (_) => result.first.page,

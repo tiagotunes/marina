@@ -15,8 +15,9 @@ async function authorizePostRequest(req, res, next) {
     `${API}/login`,
     `${API}/register`,
     `${API}/forgot-password`,
-    `${API}/verify-otp`,
     `${API}/reset-password`,
+    `${API}/verify-otp`,
+    `${API}/verify-token`,
   ];
   const isMatchingEndpoint = endpoints.some((ep) =>
     req.originalUrl.includes(ep)

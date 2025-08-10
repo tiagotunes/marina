@@ -19,6 +19,8 @@ function authJwt() {
       `${API}/verify-otp/`,
       `${API}/reset-password`,
       `${API}/reset-password/`,
+      `${API}/verify-token`,
+      `${API}/verify-token/`,
     ],
   });
 }
