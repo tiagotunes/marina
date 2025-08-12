@@ -112,6 +112,28 @@ class HttpUtil {
     );
   }
 
+  Future<Response> put(
+    String path, {
+    Object? data,
+    DataMap? queryParameters,
+    Options? options,
+  }) async {
+    Options requestOptions = options ?? Options();
+    requestOptions.headers = requestOptions.headers ?? {};
+
+    DataMap? authorization = getAuthorizationHeader();
+    if (authorization != null) {
+      requestOptions.headers!.addAll(authorization);
+    }
+
+    return await dio.put(
+      path,
+      data: data,
+      queryParameters: queryParameters,
+      options: requestOptions,
+    );
+  }
+
   Future<bool> isTokenValid() async {
     try {
       final res = await get('/verify-token');

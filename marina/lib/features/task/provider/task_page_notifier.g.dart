@@ -6,7 +6,7 @@ part of 'task_page_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$indexDotHash() => r'd6ca827c77ff6a4d763c2dc357285caca92870d1';
+String _$indexDotHash() => r'b8a410ade8ab177d7884e9e7c958fab7fa8b8366';
 
 /// See also [IndexDot].
 @ProviderFor(IndexDot)

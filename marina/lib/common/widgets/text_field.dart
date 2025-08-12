@@ -14,7 +14,6 @@ Widget textField({
 }) {
   return TextField(
     controller: controller,
-    maxLines: null,
     decoration: InputDecoration(
       enabled: enabled,
       hintText: hint,

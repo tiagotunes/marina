@@ -6,4 +6,16 @@ class TaskRepo {
     final response = await HttpUtil().get('/tasks/$taskId');
     return response;
   }
+
+  static Future<Response> updateTaskDetails(
+    String taskId,
+    String measureId,
+    int value,
+  ) async {
+    final response = await HttpUtil().put(
+      '/tasks/$taskId/measures/$measureId',
+      data: {'value': value},
+    );
+    return response;
+  }
 }

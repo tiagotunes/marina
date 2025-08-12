@@ -12,4 +12,12 @@ class IndexDot extends _$IndexDot {
   void changeIndex(int value) {
     state = value;
   }
+
+  void nextIndex() {
+    state = state + 1;
+  }
+
+  void backIndex() {
+    state = state - 1;
+  }
 }

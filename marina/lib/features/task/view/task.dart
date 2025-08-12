@@ -39,12 +39,9 @@ class _TaskState extends ConsumerState<Task> {
                     controller: pageController,
                     scrollDirection: Axis.horizontal,
                     children: [
-                      taskPage1(
-                        task.docId!.title ?? "",
-                        task.docId!.text ?? "",
-                      ),
-                      taskPage2(ref, task.measures ?? []),
-                      taskPage3(ref, task.comment ?? ""),
+                      taskPage1(ref, pageController, task),
+                      taskPage2(ref, pageController, task),
+                      taskPage3(ref, pageController, task),
                     ],
                   );
                 },
