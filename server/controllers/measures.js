@@ -7,35 +7,36 @@ const { Measure } = require("../models/measure");
   GET 
   /tasks/:id/measures
 ------------------------------------------------------------------------*/
-exports.getMeasures = async function (req, res) {
+exports.getMeasures = async (req, res) => {
   try {
-    const page = req.query.page || 1;
+    const page = parseInt(req.query.page) || 1;
     const pageSize = 10;
 
     const task = await Task.findById(req.params.id);
     if (!task) return res.status(404).json({ message: "Task not found" });
 
-    const measures = Measure.find({ _id: { $in: task.measures } })
+    const measures = await Measure.find({ _id: { $in: task.measures } })
       .sort({ dtUp: -1, dt_Cr: -1 })
       .skip((page - 1) * pageSize)
       .limit(pageSize);
-    if (!measures)
-      return res.status(404).json({ message: "Measures not found" });
+
+    if (!measures.length)
+      return res.status(404).json({ message: "No measures found" });
 
     return res.json(measures);
   } catch (error) {
-    // console.error(error);
+    console.error(error);
     return res.status(500).json({ type: error.name, message: error.message });
   }
 };
 
 /*------------------------------------------------------------------------
   PUT 
-  /tasks/:id/measures/:measureId
+  /task/:taskId/measures/:measureId
 ------------------------------------------------------------------------*/
 exports.editMeasure = async function (req, res) {
   try {
-    let task = await Task.findById(req.params.id);
+    let task = await Task.findById(req.params.taskId);
     if (!task) return res.status(404).json({ message: "Task not found" });
 
     let measure = await Measure.findByIdAndUpdate(

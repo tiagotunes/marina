@@ -27,6 +27,7 @@ const validatePassword = [
 ];
 
 router.get("/verify-token", authController.verifyToken);
+
 router.post("/forgot-password", authController.forgotPassword);
 router.post("/login", authController.login);
 router.post("/register", validateUser, authController.register);

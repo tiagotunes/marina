@@ -5,70 +5,66 @@
 */
 
 // Import libraries
-const bodyParser = require("body-parser");
-const cors = require("cors");
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require("cors");
 const morgan = require("morgan");
+const bodyParser = require("body-parser");
 require("dotenv/config");
+
+// Middlewares
 const authJwt = require("./middlewares/jwt");
 const authorizePostRequest = require("./middlewares/authorization");
 const errorHandler = require("./middlewares/error_handler");
 
-const app = express();
-const env = process.env;
-const api = env.API_URL;
+// Cron jobs
+require("./helpers/cron_job");
 
-// Middlewares
+// Destructure env vars
+const {
+  API_URL,
+  HOST = "0.0.0.0",
+  PORT = 3000,
+  MONGODB_CONNECTION_STRING,
+} = process.env;
+
+const app = express();
+
+/* ------------------- Global Middlewares ------------------- */
 app.use(bodyParser.json());
 app.use(morgan("tiny"));
 app.use(cors());
 app.options("*", cors());
 
+/* ------------------- Public Routes ------------------- */
 app.get("/", (req, res) => {
   res.send("API está ativa");
 });
 
+/* ------------------- Protected Middlewares ------------------- */
 app.use(authJwt());
 app.use(authorizePostRequest);
-app.use(errorHandler);
 
-// Routes
-const adminRouter = require("./routes/admin");
-const authRouter = require("./routes/auth");
-const domainsRouter = require("./routes/domains");
-const tasksRouter = require("./routes/tasks");
-const usersRouter = require("./routes/users");
+/* ------------------- API Routes ------------------- */
+app.use(`${API_URL}/admin`, require("./routes/admin"));
+app.use(`${API_URL}/`, require("./routes/auth"));
+app.use(`${API_URL}/domains`, require("./routes/domains"));
+app.use(`${API_URL}/tasks`, require("./routes/tasks"));
+app.use(`${API_URL}/users`, require("./routes/users"));
 
-app.use(`${api}/admin`, adminRouter);
-app.use(`${api}/`, authRouter);
-app.use(`${api}/domains`, domainsRouter);
-app.use(`${api}/tasks`, tasksRouter);
-app.use(`${api}/users`, usersRouter);
+// Static files
 app.use("/public", express.static(__dirname + "/public"));
 
-// Start the server
-const hostname = env.HOST || "0.0.0.0";
-const port = env.PORT || 3000;
+/* ------------------- Error Handler ------------------- */
+app.use(errorHandler);
 
-require("./helpers/cron_job");
-
+/* ------------------- Database Connection ------------------- */
 mongoose
-  .connect(env.MONGODB_CONNECTION_STRING)
-  .then(() => {
-    console.log("Connected to database");
-  })
-  .catch((error) => {
-    console.error(error);
-  });
+  .connect(MONGODB_CONNECTION_STRING)
+  .then(() => console.log("Connected to database"))
+  .catch((err) => console.error("DB connection error:", err));
 
-app.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}`);
+/* ------------------- Start Server ------------------- */
+app.listen(PORT, HOST, () => {
+  console.log(`Server running at http://${HOST}:${PORT}`);
 });
-
-/*
-[C]reate data -> app.post()
-[R]ead data -> app.get()
-[U]pdate data -> app.put()
-[D]elete data -> app.delete()
-*/

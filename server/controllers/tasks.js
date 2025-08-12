@@ -36,7 +36,7 @@ exports.getTask = async function (req, res) {
   GET 
   /users/:id/tasks
 ------------------------------------------------------------------------*/
-exports.getUserTaks = async (req, res) => {
+exports.getUserTasks = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
     if (!user) {
@@ -79,7 +79,7 @@ exports.getUserTasksCount = async function (req, res) {
   POST 
   /users/:id/tasks
 ------------------------------------------------------------------------*/
-exports.addUserTaks = async (req, res) => {
+exports.addUserTasks = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
     if (!user) {
@@ -98,17 +98,12 @@ exports.addUserTaks = async (req, res) => {
 
 /*------------------------------------------------------------------------
   POST 
-  /users/:id/tasks/:taskId
+  /tasks/:id
 ------------------------------------------------------------------------*/
-exports.editUserTak = async (req, res) => {
+exports.editUserTask = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
     const task = await Task.findByIdAndUpdate(
-      req.params.taskId,
+      req.params.id,
       { ...req.body, dtUp: Date.now() },
       { new: true, runValidators: true }
     );
