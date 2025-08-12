@@ -14,7 +14,8 @@ class TaskNotifier extends _$TaskNotifier {
   FutureOr<TaskModel> build(String taskId) async {
     try {
       final response = await TaskRepo.getTaskDetails(taskId);
-      return TaskModel.fromJson(response.data);
+      final task = TaskModel.fromJson(response.data);
+      return task;
     } on DioException catch (e) {
       // Display the message set in the interceptor
       toastInfo(e.error.toString());

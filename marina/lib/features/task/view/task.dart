@@ -7,13 +7,19 @@ import 'package:marina/features/task/provider/task_notifier.dart';
 import 'package:marina/features/task/provider/task_page_notifier.dart';
 import 'package:marina/features/task/view/widget/task_page.dart';
 
-class Task extends ConsumerWidget {
+class Task extends ConsumerStatefulWidget {
   const Task({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<Task> createState() => _TaskState();
+}
+
+class _TaskState extends ConsumerState<Task> {
+  final PageController pageController = PageController();
+
+  @override
+  Widget build(BuildContext context) {
     final taskId = ModalRoute.of(context)!.settings.arguments as String;
-    final PageController pageController = PageController();
     final index = ref.watch(indexDotProvider);
     final taskAsync = ref.watch(taskNotifierProvider(taskId));
 
@@ -25,27 +31,23 @@ class Task extends ConsumerWidget {
           children: [
             Expanded(
               child: taskAsync.when(
-                data: (task) => PageView(
-                  onPageChanged: (value) {
-                    ref.read(indexDotProvider.notifier).changeIndex(value);
-                  },
-                  controller: pageController,
-                  scrollDirection: Axis.horizontal,
-                  children: [
-                    TaskPage1(
-                      title: task.docId!.title!,
-                      text: task.docId!.text!,
-                    ),
-                    TaskPage1(
-                      title: task.docId!.title!,
-                      text: task.docId!.text!,
-                    ),
-                    TaskPage1(
-                      title: task.docId!.title!,
-                      text: task.docId!.text!,
-                    ),
-                  ],
-                ),
+                data: (task) {
+                  return PageView(
+                    onPageChanged: (value) {
+                      ref.read(indexDotProvider.notifier).changeIndex(value);
+                    },
+                    controller: pageController,
+                    scrollDirection: Axis.horizontal,
+                    children: [
+                      taskPage1(
+                        task.docId!.title ?? "",
+                        task.docId!.text ?? "",
+                      ),
+                      taskPage2(ref, task.measures ?? []),
+                      taskPage3(ref, task.comment ?? ""),
+                    ],
+                  );
+                },
                 error: (e, st) => Text('Error loading task: $e'),
                 loading: () => Center(child: marinaLoader()),
               ),

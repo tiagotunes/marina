@@ -11,6 +11,7 @@ class TaskModel {
   int? score;
   List<Measure>? measures;
   String? status;
+  String? comment;
   DateTime? dtCr;
   int? v;
 
@@ -23,6 +24,7 @@ class TaskModel {
     this.score,
     this.measures,
     this.status,
+    this.comment,
     this.dtCr,
     this.v,
   });
@@ -38,6 +40,7 @@ class TaskModel {
       json["measures"].map((x) => Measure.fromJson(x)),
     ),
     status: json["status"],
+    comment: json['comment'],
     dtCr: DateTime.parse(json["dtCr"]),
     v: json["__v"],
   );
@@ -51,6 +54,7 @@ class TaskModel {
     "score": score,
     "measures": List<dynamic>.from(measures!.map((x) => x.toJson())),
     "status": status,
+    "comment": comment,
     "dtCr": dtCr!.toIso8601String(),
     "__v": v,
   };

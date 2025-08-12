@@ -14,6 +14,7 @@ Widget textField({
 }) {
   return TextField(
     controller: controller,
+    maxLines: null,
     decoration: InputDecoration(
       enabled: enabled,
       hintText: hint,
@@ -26,5 +27,6 @@ Widget textField({
     obscureText: obscureText,
     onChanged: func == null ? (_) {} : (value) => func(value),
     readOnly: readOnly,
+    textAlignVertical: TextAlignVertical.top,
   );
 }
