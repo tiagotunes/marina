@@ -1,8 +1,7 @@
 const { User } = require("../models/user");
 const { Task } = require("../models/task");
 const { createTasks } = require("../helpers/cron_job");
-const { Document } = require("../models/document");
-const { MeasureType } = require("../models/measure_type");
+const { Measure } = require("../models/measure");
 
 /*------------------------------------------------------------------------
   GET 
@@ -111,6 +110,33 @@ exports.editUserTask = async (req, res) => {
       return res.status(404).json({ message: "Task not found" });
     }
     return res.json(task);
+  } catch (error) {
+    // console.error(error);
+    return res.status(500).json({ type: error.name, message: error.message });
+  }
+};
+
+/*------------------------------------------------------------------------
+  PUT 
+  /task/:taskId/measures/:measureId
+------------------------------------------------------------------------*/
+exports.editMeasure = async function (req, res) {
+  try {
+    let task = await Task.findById(req.params.taskId);
+    if (!task) return res.status(404).json({ message: "Task not found" });
+
+    let measure = await Measure.findByIdAndUpdate(
+      req.params.measureId,
+      { value: req.body.value, dtU: Date.now() },
+      { new: true, runValidators: true }
+    );
+    if (!measure) return res.status(404).json({ message: "Measure not found" });
+
+    task.status = "submit";
+    task.dtU = Date.now();
+    task = await task.save();
+
+    return res.status(201).json({ task, measure });
   } catch (error) {
     // console.error(error);
     return res.status(500).json({ type: error.name, message: error.message });

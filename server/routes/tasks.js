@@ -9,6 +9,6 @@ router.get("/:id/measures", measureController.getMeasures);
 
 router.post("/:id", tasksController.editUserTask);
 
-router.put(":taskId/measures/:measureId", measureController.editMeasure);
+router.put("/:taskId/measures/:measureId", tasksController.editMeasure);
 
 module.exports = router;

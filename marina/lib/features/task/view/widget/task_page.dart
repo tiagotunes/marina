@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:marina/common/global_loader/global_loader.dart';
+import 'package:marina/common/models/measure.dart';
 import 'package:marina/common/models/task.dart';
 import 'package:marina/common/utils/colours.dart';
 import 'package:marina/common/utils/text.dart';
+import 'package:marina/common/widgets/loader.dart';
 import 'package:marina/common/widgets/text_field.dart';
 import 'package:marina/features/task/provider/comment_notifier.dart';
 import 'package:marina/features/task/provider/measure_notifier.dart';
+import 'package:marina/features/task/provider/task_notifier.dart';
 import 'package:marina/features/task/provider/task_page_notifier.dart';
 import 'package:marina/features/task/view/widget/measure_value_button.dart';
 
@@ -35,12 +39,18 @@ void _onNext(WidgetRef ref, PageController pageController, int pageCount) {
   }
 }
 
-void _onSubmit(WidgetRef ref) {}
+void _onSubmit(WidgetRef ref, String taskId) async {
+  final measures = ref.read(measureNotifierProvider);
+  await ref
+      .read(taskNotifierProvider(taskId).notifier)
+      .submitTask(taskId: taskId, measures: measures);
+}
 
 Widget taskPage1(WidgetRef ref, PageController pageController, TaskModel task) {
   return taskPageBase(
     ref: ref,
     pageController: pageController,
+    task: task,
     child: Column(
       children: [
         Text(task.docId!.title!, style: TextStyles.heading3),
@@ -54,21 +64,20 @@ Widget taskPage1(WidgetRef ref, PageController pageController, TaskModel task) {
 }
 
 Widget taskPage2(WidgetRef ref, PageController pageController, TaskModel task) {
-  final selectedValues = ref.watch(
-    measureNotifierProvider(task.measures ?? []),
-  );
+  final selectedValues = ref.watch(measureNotifierProvider);
 
   return taskPageBase(
     ref: ref,
     pageController: pageController,
+    task: task,
     child: ListView.separated(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemCount: task.measures!.length,
       separatorBuilder: (_, __) => const SizedBox(height: 48),
       itemBuilder: (context, index) {
-        final measure = task.measures![index];
-        final selectedValue = selectedValues[measure.id ?? ''];
+        final Measure measure = task.measures![index];
+        final selectedValue = selectedValues[measure.id ?? ''] ?? 0;
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -83,9 +92,15 @@ Widget taskPage2(WidgetRef ref, PageController pageController, TaskModel task) {
                     number == selectedValue && selectedValue != 0;
                 return GestureDetector(
                   onTap: () {
-                    ref
-                        .read(measureNotifierProvider(task.measures!).notifier)
-                        .setValue(measure.id ?? '', number);
+                    if (isSelected) {
+                      ref
+                          .read(measureNotifierProvider.notifier)
+                          .setValue(measure.id ?? '', 0);
+                    } else {
+                      ref
+                          .read(measureNotifierProvider.notifier)
+                          .setValue(measure.id ?? '', number);
+                    }
                   },
                   child: measureValueButton(number, isSelected),
                 );
@@ -107,6 +122,7 @@ Widget taskPage3(WidgetRef ref, PageController pageController, TaskModel task) {
   return taskPageBase(
     ref: ref,
     pageController: pageController,
+    task: task,
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -130,6 +146,7 @@ Widget taskPage3(WidgetRef ref, PageController pageController, TaskModel task) {
 Widget taskPageBase({
   required WidgetRef ref,
   required PageController pageController,
+  required TaskModel task,
   required Widget child,
   int page = 0,
   int pageCount = 0,
@@ -144,10 +161,11 @@ Widget taskPageBase({
         children: [
           Expanded(child: child), // allow scrolling content to expand properly
           taskPageIcons(
+            ref,
             page,
             onNext: () => _onNext(ref, pageController, pageCount),
             onBack: () => _onBack(ref, pageController),
-            onSubmit: () => _onSubmit(ref),
+            onSubmit: () => _onSubmit(ref, task.id!),
           ),
         ],
       ),
@@ -156,11 +174,13 @@ Widget taskPageBase({
 }
 
 Widget taskPageIcons(
+  WidgetRef ref,
   int page, {
   VoidCallback? onNext,
   VoidCallback? onBack,
   VoidCallback? onSubmit,
 }) {
+  final loader = ref.watch(globalLoaderProvider);
   switch (page) {
     case 1:
       return Row(
@@ -201,7 +221,9 @@ Widget taskPageIcons(
           IconButton(
             tooltip: 'Submit',
             onPressed: onSubmit,
-            icon: const Icon(Icons.playlist_add_check_rounded),
+            icon: loader
+                ? marinaLoader()
+                : const Icon(Icons.playlist_add_check_rounded),
           ),
         ],
       );
