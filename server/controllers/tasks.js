@@ -89,10 +89,7 @@ exports.addUserTasks = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    // if (!createTasks(user._id))
-    //   return res
-    //     .status(500)
-    //     .json({ message: "Could not create new tasks for the user" });
+
     const ok = await createTasks(user._id);
     if (!ok)
       return res

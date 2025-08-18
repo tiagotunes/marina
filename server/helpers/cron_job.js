@@ -74,7 +74,6 @@ async function updateDomains() {
  * * Generates tasks for active users based on open documents and active measure types.
  ---------------------------------------------------------------------------------*/
 async function createTasks(userId = null) {
-  console.log(userId);
   try {
     if (!userId) console.log(`[CREATE_TASKS] ${getDate()} Running`);
 
