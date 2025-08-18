@@ -5,7 +5,7 @@ import 'package:marina/common/models/measure.dart';
 import 'package:marina/common/models/task.dart';
 import 'package:marina/common/utils/colours.dart';
 import 'package:marina/common/utils/text.dart';
-import 'package:marina/common/widgets/loader.dart';
+import 'package:marina/common/widgets/progress_indicator.dart';
 import 'package:marina/common/widgets/text_field.dart';
 import 'package:marina/features/task/provider/comment_notifier.dart';
 import 'package:marina/features/task/provider/measure_notifier.dart';
@@ -51,12 +51,14 @@ Widget taskPage1(WidgetRef ref, PageController pageController, TaskModel task) {
     ref: ref,
     pageController: pageController,
     task: task,
-    child: Column(
-      children: [
-        Text(task.docId!.title!, style: TextStyles.heading3),
-        SizedBox(height: 16),
-        Text(task.docId!.text!, style: TextStyles.body1),
-      ],
+    child: SingleChildScrollView(
+      child: Column(
+        children: [
+          Text(task.docId!.title!, style: TextStyles.heading3),
+          SizedBox(height: 16),
+          Text(task.docId!.text!, style: TextStyles.body1),
+        ],
+      ),
     ),
     page: 1,
     pageCount: 3,
@@ -160,6 +162,7 @@ Widget taskPageBase({
         mainAxisSize: MainAxisSize.min,
         children: [
           Expanded(child: child), // allow scrolling content to expand properly
+          SizedBox(height: 16),
           taskPageIcons(
             ref,
             page,
@@ -222,7 +225,7 @@ Widget taskPageIcons(
             tooltip: 'Submit',
             onPressed: onSubmit,
             icon: loader
-                ? marinaLoader()
+                ? marinaCircularProgressIndicator()
                 : const Icon(Icons.playlist_add_check_rounded),
           ),
         ],

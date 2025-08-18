@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:marina/common/widgets/app_bar.dart';
-import 'package:marina/common/widgets/loader.dart';
+import 'package:marina/common/widgets/progress_indicator.dart';
+import 'package:marina/common/widgets/refresh_indicator.dart';
 import 'package:marina/common/widgets/search_bar.dart';
 import 'package:marina/features/home/provider/user_task_notifier.dart';
 import 'package:marina/features/home/view/widgets/home_menu_bar.dart';
@@ -19,9 +20,7 @@ class _HomeState extends ConsumerState<Home> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() async {
-      final _ = await ref.read(homeUserProfileProvider.future);
-    });
+    ref.read(homeUserProfileProvider.future);
   }
 
   @override
@@ -49,30 +48,42 @@ class _HomeState extends ConsumerState<Home> {
                 const SizedBox(height: 24),
                 tasksAsync.when(
                   data: (tasks) {
-                    if (tasks.isEmpty) {
-                      return const Text("Sem tarefas");
-                    }
-                    return ListView.separated(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      separatorBuilder: (context, index) =>
-                          const SizedBox(height: 12),
-                      itemCount: tasks.length,
-                      itemBuilder: (context, index) {
-                        final task = tasks[index];
-                        return homeTaskCard(task);
-                      },
+                    if (tasks.isEmpty) return const Text("Sem tarefas");
+                    return Expanded(
+                      child: marinaResfreshIndicator(
+                        () => ref
+                            .read(
+                              userTasksNotifierProvider(
+                                userProfile.id!,
+                              ).notifier,
+                            )
+                            .refresh(),
+                        ListView.separated(
+                          padding: EdgeInsets.zero,
+                          separatorBuilder: (_, __) =>
+                              const SizedBox(height: 12),
+                          itemCount: tasks.length,
+                          itemBuilder: (context, index) {
+                            final task = tasks[index];
+                            return homeTaskCard(ref, userProfile.id!, task);
+                          },
+                        ),
+                      ),
                     );
                   },
-                  loading: () => Center(child: marinaLoader()),
-                  error: (e, st) => Text('Error loading tasks: $e'),
+                  loading: () => Expanded(
+                    child: Center(child: marinaCircularProgressIndicator()),
+                  ),
+                  error: (e, _) =>
+                      Expanded(child: Text('Error loading tasks: $e')),
                 ),
               ],
             ),
           ),
         );
       },
-      loading: () => Scaffold(body: Center(child: marinaLoader())),
+      loading: () =>
+          Scaffold(body: Center(child: marinaCircularProgressIndicator())),
       error: (e, st) =>
           Scaffold(body: Center(child: Text('Error loading user profile: $e'))),
     );

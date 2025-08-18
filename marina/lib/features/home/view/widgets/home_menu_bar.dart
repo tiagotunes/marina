@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:marina/common/global_loader/global_loader.dart';
-import 'package:marina/common/widgets/loader.dart';
+import 'package:marina/common/widgets/progress_indicator.dart';
 import 'package:marina/common/widgets/primary_button.dart';
 import 'package:marina/features/home/provider/home_controller.dart';
 import 'package:marina/features/home/provider/user_task_notifier.dart';
@@ -14,7 +14,7 @@ Widget homeMenuBar(BuildContext context, WidgetRef ref) {
     children: [
       Row(
         children: [
-          homeMenuBarTag(text: "Todas", selected: true),
+          homeMenuBarTag(text: "Todas", selected: false),
           SizedBox(width: 8),
           homeMenuBarTag(text: "Abertas", selected: false),
           SizedBox(width: 8),
@@ -31,7 +31,9 @@ Widget homeMenuBar(BuildContext context, WidgetRef ref) {
               .read(userTasksNotifierProvider(userProfileAsync.id!).notifier)
               .addTask();
         },
-        center: loader ? marinaLoader() : Icon(Icons.add_rounded),
+        center: loader
+            ? marinaCircularProgressIndicator()
+            : Icon(Icons.add_rounded),
       ),
     ],
   );

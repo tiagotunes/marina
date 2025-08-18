@@ -9,7 +9,11 @@ const { Measure } = require("../models/measure");
 ------------------------------------------------------------------------*/
 exports.getTask = async function (req, res) {
   try {
-    const task = await Task.findById(req.params.id).populate([
+    const task = await Task.findByIdAndUpdate(
+      req.params.id,
+      { read: true }, // set read to true
+      { new: true } // return the updated task
+    ).populate([
       {
         path: "docId",
         select: "domainId title text",
@@ -21,6 +25,7 @@ exports.getTask = async function (req, res) {
         populate: { path: "measureTypeId", select: "name text" },
       },
     ]);
+
     if (!task) {
       return res.status(404).json({ message: "Task not found" });
     }
@@ -84,10 +89,16 @@ exports.addUserTasks = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    if (!createTasks(user._id))
+    // if (!createTasks(user._id))
+    //   return res
+    //     .status(500)
+    //     .json({ message: "Could not create new tasks for the user" });
+    const ok = await createTasks(user._id);
+    if (!ok)
       return res
         .status(500)
         .json({ message: "Could not create new tasks for the user" });
+
     return res.status(204).end();
   } catch (error) {
     // console.error(error);

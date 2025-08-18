@@ -14,53 +14,41 @@ part 'user_task_notifier.g.dart';
 class UserTasksNotifier extends _$UserTasksNotifier {
   @override
   FutureOr<List<UserTask>> build(String userId) async {
+    return _fetchTasks();
+  }
+
+  Future<List<UserTask>> _fetchTasks() async {
     try {
       final response = await HomeRepo.fetchUserTasks(userId);
       final List data = response.data;
       return data.map((json) => UserTask.fromJson(json)).toList();
     } on DioException catch (e) {
-      // Display the message set in the interceptor
       toastInfo(e.error.toString());
-      if (kDebugMode) {
-        print("User Task failed: ${e.error}");
-      }
-      return [];
+      debugPrint("User Task failed: ${e.error}");
+      rethrow;
     } catch (e) {
       toastInfo("Unexpected error");
-      if (kDebugMode) {
-        print(e.toString());
-      }
-      return [];
-    } finally {
-      ref.read(globalLoaderProvider.notifier).setLoaderValue(false);
+      debugPrint(e.toString());
+      rethrow;
     }
   }
 
   Future<void> refresh() async {
     state = const AsyncValue.loading();
-    final response = await HomeRepo.fetchUserTasks(userId);
-    final List data = response.data;
-    state = AsyncValue.data(
-      data.map((json) => UserTask.fromJson(json)).toList(),
-    );
+    state = await AsyncValue.guard(() async => await _fetchTasks());
   }
 
   Future<void> addTask() async {
     ref.read(globalLoaderProvider.notifier).setLoaderValue(true);
     try {
       await HomeRepo.createUserTasks(userId);
-      await refresh();
+      await refresh(); // no Future.delayed
     } on DioException catch (e) {
-      // Display the message set in the interceptor
       toastInfo(e.error.toString());
-      if (kDebugMode) {
-        print("user Task failed: ${e.error}");
-      }
+      debugPrint("User Task failed: ${e.error}");
     } catch (e) {
       toastInfo("Unexpected error");
-      if (kDebugMode) {
-        print(e.toString());
-      }
+      debugPrint(e.toString());
     } finally {
       ref.read(globalLoaderProvider.notifier).setLoaderValue(false);
     }

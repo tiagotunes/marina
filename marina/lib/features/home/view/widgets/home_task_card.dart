@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:marina/common/models/task.dart';
 import 'package:marina/common/routes/routes_names.dart';
 import 'package:marina/common/utils/colours.dart';
 import 'package:marina/common/utils/text.dart';
+import 'package:marina/features/home/provider/user_task_notifier.dart';
 import 'package:marina/main.dart';
 
-Widget homeTaskCard(UserTask task) {
+Widget homeTaskCard(WidgetRef ref, String userId, UserTask task) {
   return ListTile(
-    onTap: () =>
-        navKey.currentState?.pushNamed(RoutesNames.TASK, arguments: task.id),
+    onTap: () {
+      navKey.currentState?.pushNamed(RoutesNames.TASK, arguments: task.id);
+      ref.read(userTasksNotifierProvider(userId).notifier).refresh();
+    },
     title: Text(task.docTitle ?? ""),
-    titleTextStyle: task.read ?? false
+    titleTextStyle: task.read!
         ? TextStyles.body1
         : TextStyles.body1.copyWith(color: Colours.lightThemeWhiteColour),
     trailing: Column(
@@ -19,8 +23,11 @@ Widget homeTaskCard(UserTask task) {
         Icon(
           task.status == "submit"
               ? Icons.file_download_done_rounded
+              : task.read!
+              ? Icons.file_open_outlined
               : Icons.file_open_rounded,
         ),
+        // task.status == "submit" ? Text(task.status!.toUpperCase()) : SizedBox(),
       ],
     ),
     iconColor: task.read ?? false

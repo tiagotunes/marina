@@ -15,7 +15,7 @@ Widget homeMenuBarTag({String text = "", bool selected = false}) {
       text,
       style: selected
           ? TextStyles.tagline.copyWith(color: Colours.lightThemeWhiteColour)
-          : TextStyles.tagline,
+          : TextStyles.tagline.copyWith(color: Colours.lightThemeGray2Colour),
     ),
   );
 }

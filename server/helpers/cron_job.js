@@ -15,8 +15,8 @@ function getDate() {
  * * Setting up cron job schedules.
  * cron.schedule("<minute> <hour> <dayOfMonth> <month> <dayOfWeek>", () => ())
  ---------------------------------------------------------------------------------**/
-cron.schedule("32 16 * * *", () => updateDomains());
-cron.schedule("20 15 * * *", () => createTasks());
+cron.schedule("0 2 * * *", () => updateDomains());
+cron.schedule("0 3 * * *", () => createTasks());
 
 /**---------------------------------------------------------------------------------
  * * Updates domain status and closes associated documents based on certain conditions.
@@ -74,6 +74,7 @@ async function updateDomains() {
  * * Generates tasks for active users based on open documents and active measure types.
  ---------------------------------------------------------------------------------*/
 async function createTasks(userId = null) {
+  console.log(userId);
   try {
     if (!userId) console.log(`[CREATE_TASKS] ${getDate()} Running`);
 

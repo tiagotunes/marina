@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:marina/common/widgets/app_bar.dart';
 import 'package:marina/common/widgets/dots_indicator.dart';
-import 'package:marina/common/widgets/loader.dart';
+import 'package:marina/common/widgets/progress_indicator.dart';
 import 'package:marina/features/task/provider/task_notifier.dart';
 import 'package:marina/features/task/provider/task_page_notifier.dart';
 import 'package:marina/features/task/view/widget/task_page.dart';
@@ -24,7 +24,7 @@ class _TaskState extends ConsumerState<Task> {
     final taskAsync = ref.watch(taskNotifierProvider(taskId));
 
     return Scaffold(
-      appBar: marinaAppBar(actions: [Icon(Icons.menu_rounded)]),
+      appBar: marinaAppBar(/*actions: [Icon(Icons.menu_rounded)]*/),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(24.0, 24, 24, 36),
         child: Column(
@@ -46,7 +46,7 @@ class _TaskState extends ConsumerState<Task> {
                   );
                 },
                 error: (e, st) => Text('Error loading task: $e'),
-                loading: () => Center(child: marinaLoader()),
+                loading: () => Center(child: marinaCircularProgressIndicator()),
               ),
             ),
             SizedBox(height: 16),
