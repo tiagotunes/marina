@@ -8,6 +8,7 @@ Widget searchBar({VoidCallback? func}) {
         child: textField(
           suffix: Icon(Icons.search_rounded),
           hint: "Pesquisar",
+          enabled: false,
           func: (value) {},
         ),
       ),

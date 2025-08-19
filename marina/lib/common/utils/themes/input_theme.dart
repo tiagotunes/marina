@@ -9,6 +9,10 @@ class InputTheme {
       borderSide: BorderSide.none,
     ),
     contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+    disabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(8),
+      borderSide: BorderSide(color: Colours.lightThemeGray2Colour),
+    ),
     filled: true,
     fillColor: Colours.lightThemeGray1Colour,
     focusedBorder: OutlineInputBorder(

@@ -15,8 +15,8 @@ function getDate() {
  * * Setting up cron job schedules.
  * cron.schedule("<minute> <hour> <dayOfMonth> <month> <dayOfWeek>", () => ())
  ---------------------------------------------------------------------------------**/
-cron.schedule("0 0 * * *", () => updateDomains());
-cron.schedule("0 8 * * *", () => createTasks());
+cron.schedule("0 21 * * *", () => updateDomains());
+cron.schedule("0 22 * * *", () => createTasks());
 
 /**---------------------------------------------------------------------------------
  * * Updates domain status and closes associated documents based on certain conditions.
@@ -25,8 +25,8 @@ async function updateDomains() {
   try {
     console.log(`[UPDATE_DOMAINS] ${getDate()} Running`);
 
-    let domainsToBeUpdated = await Domain.find({
-      status: { $ne: "$plannedStatus" },
+    const domainsToBeUpdated = await Domain.find({
+      $expr: { $ne: ["$status", "$plannedStatus"] },
     });
 
     if (domainsToBeUpdated.length !== 0) {
@@ -49,12 +49,13 @@ async function updateDomains() {
           { domainId: { $in: inactiveDomainIds } },
           { status: "close" }
         );
+
+        console.log(
+          `[UPDATE_DOMAINS] ${getDate()} Closed ${
+            updateResult.modifiedCount
+          } documents`
+        );
       }
-      console.log(
-        `[UPDATE_DOMAINS] ${getDate()} Closed ${
-          updateResult.modifiedCount
-        } documents`
-      );
     }
 
     console.log(
@@ -81,11 +82,14 @@ async function createTasks(userId = null) {
       MeasureType.find({ status: "active" }),
     ]);
 
-    if (!docs.length || !measureTypes.length) {
+    if (!docs.length) {
       if (!userId)
-        console.log(
-          `[CREATE_TASKS] ${getDate()} No documents or measure types available`
-        );
+        console.log(`[CREATE_TASKS] ${getDate()} No documents available`);
+      return false;
+    }
+    if (!measureTypes.length) {
+      if (!userId)
+        console.log(`[CREATE_TASKS] ${getDate()} No measure types available`);
       return false;
     }
 

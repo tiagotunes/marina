@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:marina/common/routes/routes_names.dart';
 import 'package:marina/features/application/view/application.dart';
 import 'package:marina/features/home/view/home.dart';
+import 'package:marina/features/task/view/task.dart';
 import 'package:marina/global.dart';
 import 'package:marina/features/on_boarding/view/on_boarding.dart';
 import 'package:marina/features/sign_in/view/sign_in.dart';
 import 'package:marina/features/sign_up/view/sign_up.dart';
+import 'package:marina/token_check.dart';
 
 class Routes {
   static List<RouteEntity> routes() {
@@ -16,6 +18,7 @@ class Routes {
       RouteEntity(path: RoutesNames.SIGN_UP, page: SignUp()),
       RouteEntity(path: RoutesNames.APPLICATION, page: Application()),
       RouteEntity(path: RoutesNames.HOME, page: Home()),
+      RouteEntity(path: RoutesNames.TASK, page: Task()),
     ];
   }
 
@@ -31,23 +34,11 @@ class Routes {
         bool appFirstTime = Global.storageService.getAppFirstTime();
 
         if (result.first.path == RoutesNames.ON_BOARDING && appFirstTime) {
-          bool isLoggedIn = Global.storageService.isLoggedIn();
-
-          if (isLoggedIn) {
-            return MaterialPageRoute(
-              builder: (_) => Application(),
-              settings: settings,
-            );
-          } else {
-            return MaterialPageRoute(
-              builder: (_) => SignIn(),
-              settings: settings,
-            );
-          }
+          return MaterialPageRoute(
+            builder: (_) => const TokenCheck(),
+            settings: settings,
+          );
         } else {
-          if (kDebugMode) {
-            print('App first run');
-          }
           return MaterialPageRoute(
             builder: (_) => result.first.page,
             settings: settings,

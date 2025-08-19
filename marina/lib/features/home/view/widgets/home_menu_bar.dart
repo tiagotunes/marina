@@ -1,46 +1,40 @@
 import 'package:flutter/material.dart';
-import 'package:marina/common/utils/colours.dart';
-import 'package:marina/common/utils/text.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:marina/common/global_loader/global_loader.dart';
+import 'package:marina/common/widgets/progress_indicator.dart';
+import 'package:marina/common/widgets/primary_button.dart';
+import 'package:marina/features/home/provider/home_controller.dart';
+import 'package:marina/features/home/provider/user_task_notifier.dart';
+import 'package:marina/features/home/view/widgets/home_menu_bar_tag.dart';
 
-class HomeMenuBar extends StatelessWidget {
-  const HomeMenuBar({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Container(
-          padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-          decoration: BoxDecoration(
-            color: Colours.lightThemePrimaryColour,
-            borderRadius: BorderRadius.circular(30),
-          ),
-          child: Text(
-            "Todos",
-            style: TextStyles.tagline.copyWith(
-              color: Colours.lightThemeWhiteColour,
-            ),
-          ),
-        ),
-        Container(
-          margin: EdgeInsets.only(left: 16),
-          padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-          decoration: BoxDecoration(
-            color: Colours.lightThemeGray1Colour,
-            borderRadius: BorderRadius.circular(30),
-          ),
-          child: Text("Abertos", style: TextStyles.tagline),
-        ),
-        Container(
-          margin: EdgeInsets.only(left: 16),
-          padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-          decoration: BoxDecoration(
-            color: Colours.lightThemeGray1Colour,
-            borderRadius: BorderRadius.circular(30),
-          ),
-          child: Text("Fechados", style: TextStyles.tagline),
-        ),
-      ],
-    );
-  }
+Widget homeMenuBar(BuildContext context, WidgetRef ref) {
+  final loader = ref.watch(globalLoaderProvider);
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+      Row(
+        children: [
+          homeMenuBarTag(text: "Todas", selected: false),
+          SizedBox(width: 8),
+          homeMenuBarTag(text: "Abertas", selected: false),
+          SizedBox(width: 8),
+          homeMenuBarTag(text: "Fechadas", selected: false),
+        ],
+      ),
+      primaryElevatedButton(
+        context: context,
+        func: () async {
+          final userProfileAsync = await ref.read(
+            homeUserProfileProvider.future,
+          );
+          ref
+              .read(userTasksNotifierProvider(userProfileAsync.id!).notifier)
+              .addTask();
+        },
+        center: loader
+            ? marinaCircularProgressIndicator()
+            : Icon(Icons.add_rounded),
+      ),
+    ],
+  );
 }

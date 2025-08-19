@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 Widget textField({
   TextEditingController? controller,
+  bool enabled = true,
   String? hint,
   String? label,
   String? helper,
@@ -14,6 +15,7 @@ Widget textField({
   return TextField(
     controller: controller,
     decoration: InputDecoration(
+      enabled: enabled,
       hintText: hint,
       isDense: true,
       labelText: label,
@@ -24,5 +26,6 @@ Widget textField({
     obscureText: obscureText,
     onChanged: func == null ? (_) {} : (value) => func(value),
     readOnly: readOnly,
+    textAlignVertical: TextAlignVertical.top,
   );
 }

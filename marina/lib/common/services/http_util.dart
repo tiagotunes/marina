@@ -15,7 +15,7 @@ class HttpUtil {
     BaseOptions options = BaseOptions(
       baseUrl: Constants.SERVER_API_URL,
       connectTimeout: const Duration(seconds: 7),
-      // receiveTimeout: const Duration(seconds: 7),
+      receiveTimeout: const Duration(seconds: 7),
       headers: {},
       contentType: "application/json",
       responseType: ResponseType.json,
@@ -34,9 +34,27 @@ class HttpUtil {
           return handler.next(response);
         },
         onError: (DioException exp, handler) {
-          // print('Error - $exp');
-          ErrorEntity eInfo = createErrorEntity(exp);
-          onError(eInfo);
+          String message = "Unknown error";
+
+          if (exp.response != null && exp.response?.data != null) {
+            if (exp.response?.data is Map &&
+                exp.response?.data['message'] != null) {
+              message = exp.response?.data['message'];
+            } else if (exp.response?.data is String) {
+              message = exp.response?.data;
+            }
+          } else {
+            message = mapDioErrors(exp);
+          }
+
+          handler.reject(
+            DioException(
+              requestOptions: exp.requestOptions,
+              response: exp.response,
+              type: exp.type,
+              error: message,
+            ),
+          );
         },
       ),
     );
@@ -49,8 +67,27 @@ class HttpUtil {
     if (acessToken.isNotEmpty) {
       headers['Authorization'] = 'Bearer $acessToken';
     }
-
     return headers;
+  }
+
+  Future<Response> get(
+    String path, {
+    DataMap? queryParameters,
+    Options? options,
+  }) async {
+    Options requestOptions = options ?? Options();
+    requestOptions.headers = requestOptions.headers ?? {};
+
+    DataMap? authorization = getAuthorizationHeader();
+    if (authorization != null) {
+      requestOptions.headers!.addAll(authorization);
+    }
+
+    return await dio.get(
+      path,
+      queryParameters: queryParameters,
+      options: requestOptions,
+    );
   }
 
   Future<Response> post(
@@ -67,70 +104,68 @@ class HttpUtil {
       requestOptions.headers!.addAll(authorization);
     }
 
-    var response = await dio.post(
+    return await dio.post(
       path,
       data: data,
       queryParameters: queryParameters,
       options: requestOptions,
     );
-    return response;
   }
-}
 
-class ErrorEntity implements Exception {
-  int code = -1;
-  String message = "";
+  Future<Response> put(
+    String path, {
+    Object? data,
+    DataMap? queryParameters,
+    Options? options,
+  }) async {
+    Options requestOptions = options ?? Options();
+    requestOptions.headers = requestOptions.headers ?? {};
 
-  ErrorEntity({required this.code, required this.message});
+    DataMap? authorization = getAuthorizationHeader();
+    if (authorization != null) {
+      requestOptions.headers!.addAll(authorization);
+    }
 
-  @override
-  String toString() {
-    if (message == "") return "Exveption";
-    return "Exception code $code $message";
+    return await dio.put(
+      path,
+      data: data,
+      queryParameters: queryParameters,
+      options: requestOptions,
+    );
   }
-}
 
-ErrorEntity createErrorEntity(DioException error) {
-  switch (error.type) {
-    case DioExceptionType.connectionTimeout:
-      return ErrorEntity(code: -1, message: "Connection timed out");
-    case DioExceptionType.sendTimeout:
-      return ErrorEntity(code: -1, message: "Send timed out");
-    case DioExceptionType.receiveTimeout:
-      return ErrorEntity(code: -1, message: "Receive timed out");
-    case DioExceptionType.badCertificate:
-      return ErrorEntity(code: -1, message: "Bad SSL certificates");
-    case DioExceptionType.badResponse:
-      switch (error.response!.statusCode) {
-        case 400:
-          return ErrorEntity(code: 400, message: "Request syntax error");
-        case 401:
-          return ErrorEntity(code: 401, message: "Permission denied");
+  Future<bool> isTokenValid() async {
+    try {
+      final res = await get('/verify-token');
+      if (res.data) {
+        return true;
+      } else {
+        await Global.storageService.removeUserPrefs();
+        return false;
       }
-      return ErrorEntity(code: -1, message: "Bad response");
-    case DioExceptionType.cancel:
-      return ErrorEntity(code: -1, message: "Server cancel");
-    case DioExceptionType.connectionError:
-      return ErrorEntity(code: -1, message: "Connection error");
-    case DioExceptionType.unknown:
-      return ErrorEntity(code: -1, message: "Unknown error");
+    } catch (e) {
+      return false;
+    }
   }
 }
 
-void onError(ErrorEntity eInfo) {
-  print('Error code -> ${eInfo.code} | Error message -> ${eInfo.message}');
-  switch (eInfo.code) {
-    case 400:
-      print("Server syntax error");
-      break;
-    case 401:
-      print("You are denied to continue");
-      break;
-    case 500:
-      print("Internal server error");
-      break;
+String mapDioErrors(DioException exp) {
+  switch (exp.type) {
+    case DioExceptionType.connectionTimeout:
+      return "Connection timed out";
+    case DioExceptionType.sendTimeout:
+      return "Send timed out";
+    case DioExceptionType.receiveTimeout:
+      return "Receive timed out";
+    case DioExceptionType.badCertificate:
+      return "Bad SSL certificate";
+    case DioExceptionType.cancel:
+      return "Request cancelled";
+    case DioExceptionType.connectionError:
+      return "Connection error";
+    case DioExceptionType.unknown:
+      return "Unknown error";
     default:
-      print("Unknown error");
-      break;
+      return "Request failed";
   }
 }

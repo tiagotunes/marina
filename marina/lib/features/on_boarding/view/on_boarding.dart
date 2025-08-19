@@ -1,7 +1,7 @@
-import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:marina/common/utils/image_res.dart';
+import 'package:marina/common/widgets/dots_indicator.dart';
 import 'package:marina/features/on_boarding/provider/on_boarding_notifier.dart';
 import 'package:marina/features/on_boarding/view/widgets/on_boarding_page.dart';
 
@@ -29,40 +29,32 @@ class OnBoarding extends ConsumerWidget {
                 OnBoardingPage(
                   context: context,
                   pageController: _pageController,
-                  title: "ON_BOARDING ${index + 1}",
-                  subtitle: "ObBoarding Subtitle ${index + 1}",
+                  title: "Valida conteúdos de saúde",
+                  subtitle:
+                      "Garante que os materiais educativos sobre diabetes são claros, corretos e fiáveis. A tua contribuição tem impacto direto na saúde pública.",
                   imgPath: ImageRes.logo,
                 ),
                 OnBoardingPage(
                   context: context,
                   pageController: _pageController,
-                  title: "ON_BOARDING ${index + 1}",
-                  subtitle: "ObBoarding Subtitle ${index + 1}",
+                  title: "Microtarefas rápidas,\nem qualquer lugar",
+                  subtitle:
+                      "Recebe pequenas tarefas que demoram apenas alguns minutos. Revê textos, responde a questões ou assinala informação pouco clara — tudo no telemóvel.",
                   imgPath: ImageRes.logo,
                 ),
                 OnBoardingPage(
                   context: context,
                   pageController: _pageController,
-                  title: "ON_BOARDING ${index + 1}",
-                  subtitle: "ObBoarding Subtitle ${index + 1}",
+                  title: "Flexível. Simples. Relevante.",
+                  subtitle:
+                      "Completa tarefas ao teu ritmo, recebe lembretes por notificações e ajuda a melhorar a educação em saúde — quando e onde quiseres.",
                   imgPath: ImageRes.logo,
                 ),
               ],
             ),
             Positioned(
               bottom: 50,
-              child: DotsIndicator(
-                position: index.toDouble(),
-                dotsCount: 3,
-                mainAxisAlignment: MainAxisAlignment.center,
-                decorator: DotsDecorator(
-                  size: const Size.square(9.0),
-                  activeSize: const Size(24, 8),
-                  activeShape: RoundedRectangleBorder(
-                    borderRadius: BorderRadiusGeometry.circular(5),
-                  ),
-                ),
-              ),
+              child: marinaDotsIndicator(index.toDouble(), 3),
             ),
           ],
         ),

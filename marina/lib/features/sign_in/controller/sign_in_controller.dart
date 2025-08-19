@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -62,17 +63,24 @@ class SignInController {
           (route) => false,
         );
       } else {
-        toastInfo('Error sign in');
+        final msg = (response.data is Map && response.data['message'] != null)
+            ? response.data['message']
+            : 'Error sign in';
+        toastInfo(msg);
+      }
+    } on DioException catch (e) {
+      // Display the message set in the interceptor
+      toastInfo(e.error.toString());
+      if (kDebugMode) {
+        print("Sign in failed: ${e.error}");
       }
     } catch (e) {
+      toastInfo("Unexpected error");
       if (kDebugMode) {
         print(e.toString());
       }
     }
-    // asyncPostAllData(user);
 
     ref.read(globalLoaderProvider.notifier).setLoaderValue(false);
   }
-
-  void asyncPostAllData(UserProfile user) {}
 }

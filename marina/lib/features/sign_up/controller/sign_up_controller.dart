@@ -13,8 +13,8 @@ class SignUpController {
   TextEditingController passwordController = TextEditingController();
   TextEditingController rePasswordController = TextEditingController();
   TextEditingController nameController = TextEditingController();
-  TextEditingController genderController = TextEditingController();
-  TextEditingController roleController = TextEditingController();
+  // TextEditingController genderController = TextEditingController();
+  // TextEditingController roleController = TextEditingController();
 
   void handleSignUp(WidgetRef ref) async {
     var state = ref.read(signUpNotifierProvider);
