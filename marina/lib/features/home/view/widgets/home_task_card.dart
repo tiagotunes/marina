@@ -10,8 +10,11 @@ import 'package:marina/main.dart';
 Widget homeTaskCard(WidgetRef ref, String userId, UserTask task) {
   return ListTile(
     onTap: () {
-      navKey.currentState?.pushNamed(RoutesNames.TASK, arguments: task.id);
-      ref.read(userTasksNotifierProvider(userId).notifier).refresh();
+      navKey.currentState?.pushNamed(RoutesNames.TASK, arguments: task.id).then(
+        (_) {
+          ref.read(userTasksNotifierProvider(userId).notifier).refresh();
+        },
+      );
     },
     title: Text(task.docTitle ?? ""),
     titleTextStyle: task.read!
