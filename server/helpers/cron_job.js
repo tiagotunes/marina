@@ -15,8 +15,8 @@ function getDate() {
  * * Setting up cron job schedules.
  * cron.schedule("<minute> <hour> <dayOfMonth> <month> <dayOfWeek>", () => ())
  ---------------------------------------------------------------------------------**/
-cron.schedule("0 2 * * *", () => updateDomains());
-cron.schedule("0 3 * * *", () => createTasks());
+cron.schedule("0 21 * * *", () => updateDomains());
+cron.schedule("0 22 * * *", () => createTasks());
 
 /**---------------------------------------------------------------------------------
  * * Updates domain status and closes associated documents based on certain conditions.
