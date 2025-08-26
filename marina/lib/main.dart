@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       navigatorKey: navKey,
-      title: 'Flutter Demo',
+      title: 'MARINA',
       theme: MAppTheme.lightThemeData,
       onGenerateRoute: Routes.generateRouteSettings,
     );
