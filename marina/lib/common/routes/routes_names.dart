@@ -5,4 +5,7 @@ class RoutesNames {
   static const String APPLICATION = "/application";
   static const String HOME = "/home";
   static const String TASK = "/task";
+  static const String PROFILE = "/profile";
+  static const String SETTINGS = "/settings";
+  static const String ABOUT = "/about";
 }

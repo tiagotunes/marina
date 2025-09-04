@@ -1,8 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:marina/common/routes/routes_names.dart';
+import 'package:marina/features/about/view/about.dart';
 import 'package:marina/features/application/view/application.dart';
 import 'package:marina/features/home/view/home.dart';
+import 'package:marina/features/profile/view/profile.dart';
+import 'package:marina/features/settings/view/settings.dart';
 import 'package:marina/features/task/view/task.dart';
 import 'package:marina/global.dart';
 import 'package:marina/features/on_boarding/view/on_boarding.dart';
@@ -19,6 +22,9 @@ class Routes {
       RouteEntity(path: RoutesNames.APPLICATION, page: Application()),
       RouteEntity(path: RoutesNames.HOME, page: Home()),
       RouteEntity(path: RoutesNames.TASK, page: Task()),
+      RouteEntity(path: RoutesNames.PROFILE, page: Profile()),
+      RouteEntity(path: RoutesNames.SETTINGS, page: Settings()),
+      RouteEntity(path: RoutesNames.ABOUT, page: About()),
     ];
   }
 

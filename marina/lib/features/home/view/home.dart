@@ -34,7 +34,6 @@ class _HomeState extends ConsumerState<Home> {
         );
 
         return Scaffold(
-          backgroundColor: Colors.white,
           appBar: marinaAppBar(title: const Text("MARINA")),
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),

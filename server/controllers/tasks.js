@@ -47,7 +47,10 @@ exports.getUserTasks = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    const tasks = await Task.find({ userId: user._id })
+    const tasks = await Task.find({
+      userId: user._id,
+      status: { $ne: "submit" },
+    })
       .select("docId read dtDeadline status")
       .populate({ path: "docId", select: "title" })
       .sort({ dtDeadline: -1 });
