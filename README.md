@@ -1,6 +1,8 @@
 # MARINA
 
-> Moblie App foR medIcal anNotAtion
+<img src="marina/assets/images/logo.png" height="175">
+
+**M**oblie **A**pp fo**R** med**I**cal an**N**ot**A**tion
 
 ... but let’s be real: MARINA is my thesis turned codebase, where crowd-powered validation meets mobile magic.
 
