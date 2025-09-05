@@ -1,6 +1,6 @@
 # MARINA
 
-    Moblie App foR medIcal anNotAtion
+> Moblie App foR medIcal anNotAtion
 
 ... but let’s be real: MARINA is my thesis turned codebase, where crowd-powered validation meets mobile magic.
 
