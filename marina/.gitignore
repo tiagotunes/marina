@@ -44,4 +44,6 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-/assets/
+/assets/*
+!/assets/images/
+!/assets/images/logo.png
