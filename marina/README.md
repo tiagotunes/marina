@@ -1,16 +1,57 @@
-# marina
+# MARINA
 
-A new Flutter project.
+> Moblie App foR medIcal anNotAtion
 
-## Getting Started
+## Frontend (Flutter App)
 
-This project is a starting point for a Flutter application.
+<img src="https://camo.githubusercontent.com/c50973c15fc0e039a8d8639e8ed00b33a15e048f2f02bedcec9c7fd4688a9489/68747470733a2f2f73746f726167652e676f6f676c65617069732e636f6d2f636d732d73746f726167652d6275636b65742f63383233653533623361316137623064333661392e706e67" height="175">
 
-A few resources to get you started if this is your first Flutter project:
+This is the Flutter app that powers MARINA’s crowdsourced content validation. It’s where users log in, claim microtasks, and validate health content on the go.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Features
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- Task feed – claim microtasks in seconds
+- Validation UI – easy-to-use forms with UCD-inspired design
+- Gamification – points, progress, and streaks keep users engaged
+- Push notifications – reminders to complete tasks
+- Secure login – JWT-based auth via the Node.js backend
+
+### Setup & Run
+
+1. Enter the app folder:
+
+```bash
+cd marina
+```
+
+2. Install dependencies:
+
+```bash
+flutter pub get
+```
+
+3. Run the app:
+
+```bash
+flutter run
+```
+
+Make sure you have an emulator/device running and the server is up!
+
+### Backend Connection
+
+The frontend talks to the server (Node.js + MongoDB) via REST API.
+Make sure the backend is running, and update the API base URL in your config:
+
+```dart
+const String apiBaseUrl = "http://localhost:3000/api"; // or your deployed server
+```
+
+### Why It Exists
+
+The app is the face of MARINA:
+
+- Makes crowdsourcing accessible from anywhere
+- Keeps users engaged with good UI/UX
+- Pushes microtasks to the crowd in a fun way
+- Ensures validated content can be trusted for chatbots/ML
