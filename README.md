@@ -8,6 +8,30 @@
 
 I built this to fix one big issue: expert validation of health content is slow, pricey, and often impractical. Better to break it down into quick microtasks, ship them to users, and validate with the masses—fast, cheap, and way more fun.
 
+## Screenshots
+
+Here’s how MARINA looks in action. Each group of images corresponds to one of the app’s main tasks.
+
+#### Microtask Flow
+
+<img src="marina/assets/images/task1a.png" height="200" style="margin-right:10px;">
+<img src="marina/assets/images/task1b.png" height="200" style="margin-right:10px;">
+<img src="marina/assets/images/task1c.png" height="200" style="margin-right:10px;">
+<img src="marina/assets/images/task1d.png" height="200" style="margin-right:10px;">
+<img src="marina/assets/images/task1e.png" height="200" style="margin-right:10px;">
+<img src="marina/assets/images/task1f.png" height="200" style="margin-right:10px;">
+
+#### Notifications
+
+<img src="marina/assets/images/task2a.png" height="200" style="margin-right:10px;">
+<img src="marina/assets/images/task2b.png" height="200" style="margin-right:10px;">
+<img src="marina/assets/images/task2c.png" height="200" style="margin-right:10px;">
+
+#### App Settings
+
+<img src="marina/assets/images/task3a.png" height="200" style="margin-right:10px;">
+<img src="marina/assets/images/task3b.png" height="200" style="margin-right:10px;">
+
 ### What Actually Works
 
 - Breaks down medical content validation into microtasks
