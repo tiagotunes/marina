@@ -15,6 +15,7 @@ Here’s how MARINA looks in action. Each group of images corresponds to one of 
 #### Microtask Flow
 
 <img src="marina/assets/images/task1a.png" height="300" style="margin-right:10px;"> <img src="marina/assets/images/task1b.png" height="300" style="margin-right:10px;"> <img src="marina/assets/images/task1c.png" height="300" style="margin-right:10px;">
+
 <img src="marina/assets/images/task1d.png" height="300" style="margin-right:10px;"> <img src="marina/assets/images/task1e.png" height="300" style="margin-right:10px;"> <img src="marina/assets/images/task1f.png" height="300" style="margin-right:10px;">
 
 #### Notifications
